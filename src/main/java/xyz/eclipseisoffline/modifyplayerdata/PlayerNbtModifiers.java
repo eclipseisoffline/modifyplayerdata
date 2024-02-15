@@ -5,14 +5,16 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.AbstractNbtNumber;
-import net.minecraft.nbt.NbtByte;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Arm;
+import xyz.eclipseisoffline.modifyplayerdata.mixin.HungerManagerAccessor;
+import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerEntityAccessor;
+import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerPlayerEntityAccessor;
 
 public enum PlayerNbtModifiers {
     AIR("Air", ((player, value) -> player.setAir(((AbstractNbtNumber) value).shortValue()))),
@@ -27,13 +29,6 @@ public enum PlayerNbtModifiers {
     })),
     NO_GRAVITY("NoGravity", ((player, value) -> player.setNoGravity(getBoolean(value)))),
     PORTAL_COOLDOWN("PortalCooldown", ((player, value) -> player.setPortalCooldown(((AbstractNbtNumber) value).intValue()))),
-    ROTATION("Rotation", ((player, value) -> {
-        NbtList rotation = (NbtList) value;
-        // TODO fix
-        player.setYaw(rotation.getFloat(0));
-        player.setPitch(rotation.getFloat(1));
-        player.networkHandler.sendPacket(new EntityPositionS2CPacket(player));
-    })),
     TAGS("Tags", ((player, value) -> {
         NbtList tags = (NbtList) value;
         Set<String> currentTags = new HashSet<>(player.getCommandTags());
@@ -52,6 +47,8 @@ public enum PlayerNbtModifiers {
     TICKS_FROZEN("TicksFrozen", ((player, value) -> player.setFrozenTicks(((AbstractNbtNumber) value).intValue()))),
     ABSORPTION_AMOUNT("AbsorptionAmount", ((player, value) -> player.setAbsorptionAmount(((AbstractNbtNumber) value).floatValue()))),
     HEALTH("Health", ((player, value) -> player.setHealth(((AbstractNbtNumber) value).floatValue()))),
+    // TODO add read write hook
+    LEFT_HANDED("LeftHanded", ((player, value) -> player.setMainArm(getBoolean(value) ? Arm.LEFT : Arm.RIGHT))),
     ABILITIES("abilities", ((player, value) -> {
         NbtCompound abilities = (NbtCompound) value;
         player.getAbilities().flying = abilities.getBoolean("flying");
@@ -66,13 +63,28 @@ public enum PlayerNbtModifiers {
 
         player.sendAbilitiesUpdate();
     })),
+    ENDER_ITEMS("EnderItems", (((player, value) -> {
+        NbtList enderInventory = (NbtList) value;
+        player.getEnderChestInventory().readNbtList(enderInventory);
+    }))),
+    FOOD_EXHAUSTION_LEVEL("foodExhaustionLevel", ((player, value) -> player.getHungerManager().setExhaustion(((AbstractNbtNumber) value).floatValue()))),
+    FOOD_LEVEL("foodLevel", ((player, value) -> player.getHungerManager().setFoodLevel(((AbstractNbtNumber) value).intValue()))),
+    FOOD_SATURATION_LEVEL("foodSaturationLevel", ((player, value) -> player.getHungerManager().setSaturationLevel(((AbstractNbtNumber) value).floatValue()))),
+    FOOD_TICK_TIMER("foodTickTimer", ((player, value) -> ((HungerManagerAccessor) player.getHungerManager()).setFoodTickTimer(((AbstractNbtNumber) value).intValue()))),
+    INVENTORY("Inventory", ((player, value) -> {
+        NbtList inventory = (NbtList) value;
+        player.getInventory().readNbt(inventory);
+    })),
+    SCORE("Score", ((player, value) -> player.setScore(((AbstractNbtNumber) value).intValue()))),
+    SEEN_CREDITS("seenCredits", ((player, value) -> ((ServerPlayerEntityAccessor) player).setSeenCredits(getBoolean(value)))),
     SELECTED_ITEM_SLOT("SelectedItemSlot", ((player, value) -> {
         int slot = ((AbstractNbtNumber) value).intValue();
         if (PlayerInventory.isValidHotbarIndex(slot)) {
             player.getInventory().selectedSlot = slot;
             player.networkHandler.sendPacket(new UpdateSelectedSlotS2CPacket(slot));
         }
-    }));
+    })),
+    SLEEP_TIMER("SleepTimer", ((player, value) -> ((PlayerEntityAccessor) player).setSleepTimer(((AbstractNbtNumber) value).shortValue())));
 
     private final String key;
     private final BiConsumer<ServerPlayerEntity, NbtElement> action;

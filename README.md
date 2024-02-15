@@ -10,10 +10,10 @@ This mod is licensed under GNU GPLv3.
 
 ## Usage
 
-This mod is currently in development.
+This mod is currently in development, but mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488).
 
 This mod is currently available for Minecraft 1.20.4 (Fabric modloader). The Fabric API is not
-required.
+required. This mod is not required on clients.
 
 ## Supported tags
 
@@ -31,28 +31,26 @@ NBT tags currently supported:
 - `TicksFrozen`
 - `AbsorptionAmount`
 - `Health`
+- `LeftHanded`
 - `abilities`
-- `SelectedItemSlot`
-
-NBT tags I plan to support:
-
-- `HasVisualFire`
-- `Silent`
-- `HurtTime`
 - `EnderItems`
 - `foodExhaustionLevel`
 - `foodLevel`
 - `foodSaturationLevel`
 - `foodTickTimer`
 - `Inventory`
-- `LastDeathLocation`
-- `playerGameType`
-- `previousPlayerGameType`
-- `recipeBook`
 - `Score`
 - `seenCredits`
-- `SelectedItem`
+- `SelectedItemSlot`
 - `SleepTimer`
+
+NBT tags I plan to support:
+
+- `HasVisualFire`
+- `Silent`
+- `HurtTime`
+- `recipeBook`
+- `SelectedItem`
 - `warden_spawn_tracker`
 
 NBT tags I won't add support for:
@@ -78,7 +76,6 @@ NBT tags I won't add support for:
 - `HandDropChances`
 - `HandItems`
 - `Leash`
-- `LeftHanded`[^5]
 - `NoAI`
 - `PersistenceRequired`
 - `SleepingX`
@@ -86,25 +83,29 @@ NBT tags I won't add support for:
 - `SleepingZ`
 - `DataVersion`
 - `Dimension`[^2]
-- `enteredNetherPosition`[^8]
+- `enteredNetherPosition`[^9]
+- `LastDeathLocation`[^8]
+- `playerGameType`[^7]
+- `previousPlayerGameType`[^7]
 - `RootVehicle`[^1]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
-- `SpawnDimension`[^6]
-- `SpawnForced`[^8]
-- `SpawnX`[^6]
-- `SpawnY`[^6]
-- `SpawnZ`[^6]
-- `XpLevel`[^7]
-- `XpP`[^7]
-- `XpSeed`[^8]
-- `XpTotal`[^7]
+- `SpawnDimension`[^5]
+- `SpawnForced`[^9]
+- `SpawnX`[^5]
+- `SpawnY`[^5]
+- `SpawnZ`[^5]
+- `XpLevel`[^6]
+- `XpP`[^6]
+- `XpSeed`[^9]
+- `XpTotal`[^6]
 
 [^1]: Use the `/ride` command.
 [^2]: Use the `/tp` command.
 [^3]: Use the `/effect` command.
 [^4]: Use the `/attribute` command.
-[^5]: Though Minecraft has a left-handed option, this can't be controlled by the server.
-[^6]: Use the `/spawnpoint` command.
-[^7]: Use the `/xp` command.
-[^8]: I can't think of any use cases for this tag, but will add support on request.
+[^5]: Use the `/spawnpoint` command.
+[^6]: Use the `/xp` command.
+[^7]: Use the `/gamemode` command.
+[^8]: Unable to implement due to limitations within the vanilla client.
+[^9]: I can't think of any use cases for this tag, but will add support on request.
