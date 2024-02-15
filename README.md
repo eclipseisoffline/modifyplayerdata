@@ -86,26 +86,25 @@ NBT tags I won't add support for:
 - `SleepingZ`
 - `DataVersion`
 - `Dimension`[^2]
-- `enteredNetherPosition`[^9]
+- `enteredNetherPosition`[^8]
 - `RootVehicle`[^1]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
-- `SpawnDimension`[^7]
-- `SpawnForced`[^9]
-- `SpawnX`[^7]
-- `SpawnY`[^7]
-- `SpawnZ`[^7]
-- `XpLevel`[^8]
-- `XpP`[^8]
-- `XpSeed`[^9]
-- `XpTotal`[^8]
+- `SpawnDimension`[^6]
+- `SpawnForced`[^8]
+- `SpawnX`[^6]
+- `SpawnY`[^6]
+- `SpawnZ`[^6]
+- `XpLevel`[^7]
+- `XpP`[^7]
+- `XpSeed`[^8]
+- `XpTotal`[^7]
 
 [^1]: Use the `/ride` command.
 [^2]: Use the `/tp` command.
 [^3]: Use the `/effect` command.
 [^4]: Use the `/attribute` command.
 [^5]: Though Minecraft has a left-handed option, this can't be controlled by the server.
-[^6]: Though Minecraft has a left-handed option, this can't be controlled by the server.
-[^7]: Use the `/spawnpoint` command.
-[^8]: Use the `/xp` command.
-[^9]: I can't think of any use cases for this tag, but will add support on request.
+[^6]: Use the `/spawnpoint` command.
+[^7]: Use the `/xp` command.
+[^8]: I can't think of any use cases for this tag, but will add support on request.
