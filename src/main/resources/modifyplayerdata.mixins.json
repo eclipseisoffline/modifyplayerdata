@@ -5,9 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityDataObjectMixin",
+    "EntityMixin",
     "HungerManagerAccessor",
     "PlayerEntityAccessor",
-    "ServerPlayerEntityAccessor"
+    "ServerPlayerEntityAccessor",
+    "ServerPlayerEntityMixin"
   ],
   "client": [
   ],

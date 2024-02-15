@@ -23,6 +23,7 @@ NBT tags currently supported:
 - `FallDistance`
 - `Fire`
 - `Glowing`
+- `HasVisualFire`
 - `Invulnerable`
 - `Motion`
 - `NoGravity`
@@ -46,7 +47,6 @@ NBT tags currently supported:
 
 NBT tags I plan to support:
 
-- `HasVisualFire`
 - `Silent`
 - `HurtTime`
 - `recipeBook`
