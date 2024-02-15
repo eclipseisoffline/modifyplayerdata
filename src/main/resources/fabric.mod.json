@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "modifyplayerdata",
+  "version": "${version}",
+  "name": "Modify Player Data",
+  "description": "",
+  "authors": [
+    {
+      "name": "eclipseisoffline",
+      "contact": {
+        "homepage": "https://github.com/eclipseisoffline"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://github.com/eclipseisoffline/modifyplayerdata",
+    "issues": "https://github.com/eclipseisoffline/modifyplayerdata/issues",
+    "sources": "https://github.com/eclipseisoffline/modifyplayerdata"
+  },
+  "license": "GPLv3",
+  "icon": "assets/modifyplayerdata/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "modifyplayerdata.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}"
+  }
+}
