@@ -10,8 +10,7 @@
     "PlayerEntityAccessor",
     "SculkShriekerWarningManagerAccessor",
     "ServerPlayerEntityAccessor",
-    "ServerPlayerEntityMixin",
-    "ServerWorldMixin"
+    "ServerPlayerEntityMixin"
   ],
   "client": [
   ],

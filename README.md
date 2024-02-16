@@ -29,6 +29,7 @@ NBT tags currently supported:
 - `NoGravity`
 - `PortalCooldown`
 - `Tags`
+- `Silent`
 - `TicksFrozen`
 - `AbsorptionAmount`
 - `Health`
@@ -50,7 +51,6 @@ NBT tags currently supported:
 
 NBT tags I plan to support:
 
-- `Silent`
 - `SelectedItem`
 
 NBT tags I won't add support for:

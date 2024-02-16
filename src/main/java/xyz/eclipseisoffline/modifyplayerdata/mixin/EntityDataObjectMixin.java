@@ -27,8 +27,14 @@ public class EntityDataObjectMixin {
                 throw new AssertionError();
             }
 
+            NbtCompound oldNbt = new NbtCompound();
+            entity.writeNbt(oldNbt);
+
             ServerPlayerEntity player = (ServerPlayerEntity) entity;
             for (String key : newNbt.getKeys()) {
+                if (newNbt.get(key).equals(oldNbt.get(key))) {
+                    continue;
+                }
                 PlayerNbtModifier.modifyNbtKey(key, newNbt.get(key), player);
             }
 
