@@ -32,6 +32,7 @@ NBT tags currently supported:
 - `TicksFrozen`
 - `AbsorptionAmount`
 - `Health`
+- `HurtTime`[^9]
 - `LeftHanded`
 - `abilities`
 - `EnderItems`
@@ -40,18 +41,17 @@ NBT tags currently supported:
 - `foodSaturationLevel`
 - `foodTickTimer`
 - `Inventory`
+- `recipeBook`
 - `Score`
 - `seenCredits`
 - `SelectedItemSlot`
 - `SleepTimer`
+- `warden_spawn_tracker`
 
 NBT tags I plan to support:
 
 - `Silent`
-- `HurtTime`
-- `recipeBook`
 - `SelectedItem`
-- `warden_spawn_tracker`
 
 NBT tags I won't add support for:
 
@@ -83,7 +83,7 @@ NBT tags I won't add support for:
 - `SleepingZ`
 - `DataVersion`
 - `Dimension`[^2]
-- `enteredNetherPosition`[^9]
+- `enteredNetherPosition`[^10]
 - `LastDeathLocation`[^8]
 - `playerGameType`[^7]
 - `previousPlayerGameType`[^7]
@@ -91,13 +91,13 @@ NBT tags I won't add support for:
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
 - `SpawnDimension`[^5]
-- `SpawnForced`[^9]
+- `SpawnForced`[^10]
 - `SpawnX`[^5]
 - `SpawnY`[^5]
 - `SpawnZ`[^5]
 - `XpLevel`[^6]
 - `XpP`[^6]
-- `XpSeed`[^9]
+- `XpSeed`[^10]
 - `XpTotal`[^6]
 
 [^1]: Use the `/ride` command.
@@ -108,4 +108,5 @@ NBT tags I won't add support for:
 [^6]: Use the `/xp` command.
 [^7]: Use the `/gamemode` command.
 [^8]: Unable to implement due to limitations within the vanilla client.
-[^9]: I can't think of any use cases for this tag, but will add support on request.
+[^9]: Is implemented but does not do much due to limitations within the vanilla client
+[^10]: I can't think of any use cases for this tag, but will add support on request.

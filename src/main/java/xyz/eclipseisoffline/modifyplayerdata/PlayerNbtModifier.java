@@ -1,9 +1,14 @@
 package xyz.eclipseisoffline.modifyplayerdata;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import net.minecraft.block.entity.SculkShriekerWarningManager;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.AbstractNbtNumber;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -14,6 +19,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Arm;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.HungerManagerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerEntityAccessor;
+import xyz.eclipseisoffline.modifyplayerdata.mixin.SculkShriekerWarningManagerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerPlayerEntityAccessor;
 
 public enum PlayerNbtModifier {
@@ -35,6 +41,7 @@ public enum PlayerNbtModifier {
     NO_GRAVITY("NoGravity", ((player, value) -> player.setNoGravity(getBoolean(value)))),
     PORTAL_COOLDOWN("PortalCooldown",
             ((player, value) -> player.setPortalCooldown(((AbstractNbtNumber) value).intValue()))),
+    SILENT("Silent", ((player, value) -> player.setSilent(getBoolean(value)))),
     TAGS("Tags", ((player, value) -> {
         NbtList tags = (NbtList) value;
         Set<String> currentTags = new HashSet<>(player.getCommandTags());
@@ -56,6 +63,10 @@ public enum PlayerNbtModifier {
             ((AbstractNbtNumber) value).floatValue()))),
     HEALTH("Health",
             ((player, value) -> player.setHealth(((AbstractNbtNumber) value).floatValue()))),
+    HURT_TIME("HurtTime", ((player, value) -> {
+        player.hurtTime = ((AbstractNbtNumber) value).shortValue();
+        player.maxHurtTime = player.hurtTime;
+    })),
     LEFT_HANDED("LeftHanded",
             ((player, value) -> player.setMainArm(getBoolean(value) ? Arm.LEFT : Arm.RIGHT)),
             ((player, nbt) -> {
@@ -95,6 +106,11 @@ public enum PlayerNbtModifier {
         NbtList inventory = (NbtList) value;
         player.getInventory().readNbt(inventory);
     })),
+    RECIPE_BOOK("recipeBook", ((player, value) -> {
+        NbtCompound recipeBook = (NbtCompound) value;
+        player.getRecipeBook().readNbt(recipeBook, Objects.requireNonNull(player.getServer()).getRecipeManager());
+        player.getRecipeBook().sendInitRecipesPacket(player);
+    })),
     SCORE("Score", ((player, value) -> player.setScore(((AbstractNbtNumber) value).intValue()))),
     SEEN_CREDITS("seenCredits",
             ((player, value) -> ((ServerPlayerEntityAccessor) player).setSeenCredits(
@@ -107,7 +123,14 @@ public enum PlayerNbtModifier {
         }
     })),
     SLEEP_TIMER("SleepTimer", ((player, value) -> ((PlayerEntityAccessor) player).setSleepTimer(
-            ((AbstractNbtNumber) value).shortValue())));
+            ((AbstractNbtNumber) value).shortValue()))),
+    WARDEN_SPAWN_TRACKER("warden_spawn_tracker", ((player, value) -> {
+        SculkShriekerWarningManager wardenTracker = player.getSculkShriekerWarningManager().orElseThrow();
+        NbtCompound trackerNbt = (NbtCompound) value;
+        wardenTracker.setWarningLevel(trackerNbt.getInt("warning_level"));
+        ((SculkShriekerWarningManagerAccessor) wardenTracker).setCooldownTicks(trackerNbt.getInt("cooldown_ticks"));
+        ((SculkShriekerWarningManagerAccessor) wardenTracker).setTicksSinceLastWarning(trackerNbt.getInt("ticks_since_last_warning"));
+    }));
 
     private final String key;
     private final BiConsumer<ServerPlayerEntity, NbtElement> action;
@@ -133,6 +156,7 @@ public enum PlayerNbtModifier {
                 try {
                     modifier.action.accept(player, value);
                 } catch (Exception ignored) {
+                    ignored.printStackTrace();
                 }
             }
         }

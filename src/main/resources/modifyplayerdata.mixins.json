@@ -8,8 +8,10 @@
     "EntityMixin",
     "HungerManagerAccessor",
     "PlayerEntityAccessor",
+    "SculkShriekerWarningManagerAccessor",
     "ServerPlayerEntityAccessor",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "ServerWorldMixin"
   ],
   "client": [
   ],
