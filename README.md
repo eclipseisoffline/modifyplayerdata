@@ -29,9 +29,10 @@ NBT tags currently supported:
 - `NoGravity`
 - `PortalCooldown`
 - `Tags`
-- `Silent`
+- `Silent`[^9]
 - `TicksFrozen`
 - `AbsorptionAmount`
+- `FallFlying`
 - `Health`
 - `HurtTime`[^9]
 - `LeftHanded`
@@ -45,13 +46,10 @@ NBT tags currently supported:
 - `recipeBook`
 - `Score`
 - `seenCredits`
+- `SelectedItem`
 - `SelectedItemSlot`
 - `SleepTimer`
 - `warden_spawn_tracker`
-
-NBT tags I plan to support:
-
-- `SelectedItem`
 
 NBT tags I won't add support for:
 

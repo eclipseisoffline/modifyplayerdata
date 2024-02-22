@@ -1,6 +1,8 @@
 package xyz.eclipseisoffline.modifyplayerdata;
 
+import com.mojang.datafixers.util.Pair;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -13,6 +15,7 @@ import net.minecraft.nbt.AbstractNbtNumber;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -61,6 +64,13 @@ public enum PlayerNbtModifier {
             ((player, value) -> player.setFrozenTicks(((AbstractNbtNumber) value).intValue()))),
     ABSORPTION_AMOUNT("AbsorptionAmount", ((player, value) -> player.setAbsorptionAmount(
             ((AbstractNbtNumber) value).floatValue()))),
+    FALL_FLYING("FallFlying", ((player, value) -> {
+        if (getBoolean(value)) {
+            player.startFallFlying();
+        } else {
+            player.stopFallFlying();
+        }
+    })),
     HEALTH("Health",
             ((player, value) -> player.setHealth(((AbstractNbtNumber) value).floatValue()))),
     HURT_TIME("HurtTime", ((player, value) -> {
@@ -115,6 +125,12 @@ public enum PlayerNbtModifier {
     SEEN_CREDITS("seenCredits",
             ((player, value) -> ((ServerPlayerEntityAccessor) player).setSeenCredits(
                     getBoolean(value)))),
+    SELECTED_ITEM("SelectedItem", ((player, value) -> {
+        ItemStack item = ItemStack.fromNbt((NbtCompound) value);
+        player.getInventory().setStack(player.getInventory().selectedSlot, item);
+        player.networkHandler.sendPacket(new EntityEquipmentUpdateS2CPacket(player.getId(),
+                List.of(Pair.of(EquipmentSlot.MAINHAND, item))));
+    })),
     SELECTED_ITEM_SLOT("SelectedItemSlot", ((player, value) -> {
         int slot = ((AbstractNbtNumber) value).intValue();
         if (PlayerInventory.isValidHotbarIndex(slot)) {
