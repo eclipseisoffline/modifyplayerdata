@@ -4,6 +4,7 @@ import net.minecraft.command.EntityDataObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.predicate.NbtPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,8 +28,7 @@ public class EntityDataObjectMixin {
                 throw new AssertionError();
             }
 
-            NbtCompound oldNbt = new NbtCompound();
-            entity.writeNbt(oldNbt);
+            NbtCompound oldNbt = NbtPredicate.entityToNbt(entity);
 
             ServerPlayerEntity player = (ServerPlayerEntity) entity;
             for (String key : newNbt.getKeys()) {

@@ -10,7 +10,7 @@ This mod is licensed under GNU GPLv3.
 
 ## Usage
 
-This mod is currently in development, but mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488).
+Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488).
 
 This mod is currently available for Minecraft 1.20.4 (Fabric modloader). The Fabric API is not
 required. This mod is not required on clients.
