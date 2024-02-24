@@ -50,6 +50,8 @@ NBT tags currently supported:
 - `SelectedItemSlot`
 - `SleepTimer`
 - `warden_spawn_tracker`
+- `CustomData`
+  - This tag doesn't exist in vanilla Minecraft, and doesn't do anything. It can be used by datapack creators to store custom NBT data.
 
 NBT tags I won't add support for:
 

@@ -1,6 +1,6 @@
 package xyz.eclipseisoffline.modifyplayerdata;
 
-public interface VisualFireSetter {
+public interface VisualFireable {
 
     void modifyPlayerData$setHasVisualFire(boolean hasVisualFire);
 }

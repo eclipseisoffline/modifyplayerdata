@@ -10,7 +10,6 @@ import net.minecraft.block.entity.SculkShriekerWarningManager;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.AbstractNbtNumber;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -33,7 +32,7 @@ public enum PlayerNbtModifier {
             ((player, value) -> player.setFireTicks(((AbstractNbtNumber) value).shortValue()))),
     GLOWING("Glowing", ((player, value) -> player.setGlowing(getBoolean(value)))),
     HAS_VISUAL_FIRE("HasVisualFire",
-            ((player, value) -> ((VisualFireSetter) player).modifyPlayerData$setHasVisualFire(
+            ((player, value) -> ((VisualFireable) player).modifyPlayerData$setHasVisualFire(
                     getBoolean(value)))),
     INVULNERABLE("Invulnerable", ((player, value) -> player.setInvulnerable(getBoolean(value)))),
     MOTION("Motion", ((player, value) -> {
@@ -146,6 +145,15 @@ public enum PlayerNbtModifier {
         wardenTracker.setWarningLevel(trackerNbt.getInt("warning_level"));
         ((SculkShriekerWarningManagerAccessor) wardenTracker).setCooldownTicks(trackerNbt.getInt("cooldown_ticks"));
         ((SculkShriekerWarningManagerAccessor) wardenTracker).setTicksSinceLastWarning(trackerNbt.getInt("ticks_since_last_warning"));
+    })),
+    CUSTOM("CustomData", ((player, value) -> {
+        ((CustomDataHolder) player).modifyPlayerData$setCustomNbtData((NbtCompound) value);
+    }), ((player, nbt) -> {
+        if (nbt.contains("CustomData", NbtElement.COMPOUND_TYPE)) {
+            ((CustomDataHolder) player).modifyPlayerData$setCustomNbtData(nbt.getCompound("CustomData"));
+        }
+    }), ((player, nbt) -> {
+        nbt.put("CustomData", ((CustomDataHolder) player).modifyPlayerData$getCustomNbtData());
     }));
 
     private final String key;
@@ -171,9 +179,7 @@ public enum PlayerNbtModifier {
             if (modifier.key.equals(key)) {
                 try {
                     modifier.action.accept(player, value);
-                } catch (Exception ignored) {
-                    ignored.printStackTrace();
-                }
+                } catch (Exception ignored) {}
             }
         }
     }
