@@ -2,6 +2,9 @@
 
 This mod allows Minecraft's data commands (`/data`, `/execute store`, etc.) to modify player data.
 
+Alongside supporting most vanilla player NBT tags, this mod also adds the `CustomData` NBT tag,
+which can be used to store any type of NBT data on a per-player basis.
+
 Feel free to report any bugs, or suggest new features, at the issue tracker.
 
 ## License
@@ -10,7 +13,7 @@ This mod is licensed under GNU GPLv3.
 
 ## Usage
 
-Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488).
+Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488) and on [Modrinth](https://modrinth.com/mod/modify-player-data).
 
 This mod is currently available for Minecraft 1.20.4 (Fabric modloader). The Fabric API is not
 required. This mod is not required on clients.
