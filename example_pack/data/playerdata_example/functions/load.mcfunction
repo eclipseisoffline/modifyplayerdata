@@ -1,1 +1,2 @@
 scoreboard objectives add playerdata_example.fly dummy
+scoreboard objectives add playerdata_example.inventorycompare dummy
