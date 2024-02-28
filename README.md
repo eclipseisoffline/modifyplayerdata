@@ -31,6 +31,8 @@ NBT tags currently supported:
 - `Motion`
 - `NoGravity`
 - `PortalCooldown`
+- `Pos`
+- `Rotation`
 - `Tags`
 - `Silent`[^9]
 - `TicksFrozen`
@@ -62,8 +64,6 @@ NBT tags I won't add support for:
 - `CustomNameVisible`
 - `OnGround`
 - `Passengers`[^1]
-- `Pos`[^2]
-- `Rotation`[^2]
 - `UUID`
 - `active_effects`[^3]
 - `ArmorDropChances`
