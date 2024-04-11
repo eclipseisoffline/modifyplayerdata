@@ -1,5 +1,6 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.EntityDataObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,8 @@ public class EntityDataObjectMixin {
     private Entity entity;
 
     @Inject(method = "setNbt", at = @At("HEAD"), cancellable = true)
-    public void setPlayerNbt(NbtCompound newNbt, CallbackInfo callbackInfo) {
+    public void setPlayerNbt(NbtCompound newNbt, CallbackInfo callbackInfo)
+            throws CommandSyntaxException {
         if (entity instanceof PlayerEntity) {
             if (entity.getWorld().isClient) {
                 throw new AssertionError();

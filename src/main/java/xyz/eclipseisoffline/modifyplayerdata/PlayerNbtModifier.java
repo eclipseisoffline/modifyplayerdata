@@ -1,5 +1,7 @@
 package xyz.eclipseisoffline.modifyplayerdata;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.datafixers.util.Pair;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +21,7 @@ import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Arm;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.HungerManagerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerEntityAccessor;
@@ -110,7 +113,7 @@ public enum PlayerNbtModifier {
     })),
     ENDER_ITEMS("EnderItems", (((player, value) -> {
         NbtList enderInventory = (NbtList) value;
-        player.getEnderChestInventory().readNbtList(enderInventory);
+        player.getEnderChestInventory().readNbtList(enderInventory, player.getRegistryManager());
     }))),
     FOOD_EXHAUSTION_LEVEL("foodExhaustionLevel", ((player, value) -> player.getHungerManager()
             .setExhaustion(((AbstractNbtNumber) value).floatValue()))),
@@ -135,7 +138,7 @@ public enum PlayerNbtModifier {
             ((player, value) -> ((ServerPlayerEntityAccessor) player).setSeenCredits(
                     getBoolean(value)))),
     SELECTED_ITEM("SelectedItem", ((player, value) -> {
-        ItemStack item = ItemStack.fromNbt((NbtCompound) value);
+        ItemStack item = ItemStack.fromNbt(player.getRegistryManager(), value).orElseThrow(() -> new SimpleCommandExceptionType(Text.of("Error parsing item data")).create());
         player.getInventory().setStack(player.getInventory().selectedSlot, item);
         player.networkHandler.sendPacket(new EntityEquipmentUpdateS2CPacket(player.getId(),
                 List.of(Pair.of(EquipmentSlot.MAINHAND, item))));
@@ -167,15 +170,15 @@ public enum PlayerNbtModifier {
     }));
 
     private final String key;
-    private final BiConsumer<ServerPlayerEntity, NbtElement> action;
+    private final NbtApplier action;
     private final BiConsumer<ServerPlayerEntity, NbtCompound> readNbt;
     private final BiConsumer<ServerPlayerEntity, NbtCompound> writeNbt;
 
-    PlayerNbtModifier(String key, BiConsumer<ServerPlayerEntity, NbtElement> action) {
+    PlayerNbtModifier(String key, NbtApplier action) {
         this(key, action, null, null);
     }
 
-    PlayerNbtModifier(String key, BiConsumer<ServerPlayerEntity, NbtElement> action,
+    PlayerNbtModifier(String key, NbtApplier action,
             BiConsumer<ServerPlayerEntity, NbtCompound> readNbt,
             BiConsumer<ServerPlayerEntity, NbtCompound> writeNbt) {
         this.key = key;
@@ -184,11 +187,14 @@ public enum PlayerNbtModifier {
         this.writeNbt = writeNbt;
     }
 
-    public static void modifyNbtKey(String key, NbtElement value, ServerPlayerEntity player) {
+    public static void modifyNbtKey(String key, NbtElement value, ServerPlayerEntity player)
+            throws CommandSyntaxException {
         for (PlayerNbtModifier modifier : values()) {
             if (modifier.key.equals(key)) {
                 try {
-                    modifier.action.accept(player, value);
+                    modifier.action.apply(player, value);
+                } catch (CommandSyntaxException exception) {
+                    throw exception;
                 } catch (Exception ignored) {}
             }
         }
@@ -212,5 +218,9 @@ public enum PlayerNbtModifier {
 
     private static boolean getBoolean(NbtElement element) {
         return ((AbstractNbtNumber) element).byteValue() != 0;
+    }
+
+    private interface NbtApplier {
+        void apply(ServerPlayerEntity player, NbtElement element) throws CommandSyntaxException;
     }
 }

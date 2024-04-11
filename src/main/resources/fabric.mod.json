@@ -13,7 +13,7 @@
     }
   ],
   "contact": {
-    "homepage": "https://github.com/eclipseisoffline/modifyplayerdata",
+    "homepage": "https://modrinth.com/mod/modify-player-data",
     "issues": "https://github.com/eclipseisoffline/modifyplayerdata/issues",
     "sources": "https://github.com/eclipseisoffline/modifyplayerdata"
   },
@@ -26,6 +26,15 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.donate": "https://ko-fi.com/eclipseisoffline",
+        "modmenu.kofi": "https://ko-fi.com/eclipseisoffline",
+        "modmenu.modrinth": "https://modrinth.com/mod/modify-player-data"
+      }
+    }
   }
 }
