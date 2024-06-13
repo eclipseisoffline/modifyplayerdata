@@ -19,7 +19,7 @@ This mod is licensed under GNU GPLv3.
 
 Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488) and on [Modrinth](https://modrinth.com/mod/modify-player-data).
 
-This mod is currently available for Minecraft 1.20.5+6 and 1.20.4 (no longer updated).
+This mod is currently available for Minecraft 1.21 and 1.20.5+6/1.20.4 (no longer updated).
 The Fabric API is not required. This mod is not required on clients.
 
 ## Supported tags
