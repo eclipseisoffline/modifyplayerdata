@@ -72,7 +72,7 @@ NBT tags I won't add support for:
 - `active_effects`[^3]
 - `ArmorDropChances`
 - `ArmorItems`
-- `Attributes`[^4]
+- `attributes`[^4]
 - `Brain`
 - `CanPickUpLoot`
 - `DeathLootTable`
