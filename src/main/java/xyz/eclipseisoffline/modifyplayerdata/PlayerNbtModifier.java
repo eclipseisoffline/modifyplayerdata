@@ -49,7 +49,7 @@ public enum PlayerNbtModifier {
             ((player, value) -> player.setPortalCooldown(((AbstractNbtNumber) value).intValue()))),
     POS("Pos", ((player, value) -> {
         NbtList pos = (NbtList) value;
-        player.teleport(pos.getDouble(0), pos.getDouble(1), pos.getDouble(2));
+        player.teleport(player.getServerWorld(), pos.getDouble(0), pos.getDouble(1), pos.getDouble(2), player.getYaw(), player.getPitch());
     })),
     ROTATION("Rotation", ((player, value) -> {
         NbtList rotation = (NbtList) value;
