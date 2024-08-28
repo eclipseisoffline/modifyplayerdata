@@ -13,7 +13,7 @@ Feel free to report any bugs, or suggest new features, at the issue tracker.
 
 ## License
 
-This mod is licensed under GNU GPLv3.
+This mod is licensed under GNU LGPLv3.
 
 ## Usage
 
