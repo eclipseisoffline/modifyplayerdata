@@ -18,7 +18,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -49,12 +48,14 @@ public enum PlayerNbtModifier {
             ((player, value) -> player.setPortalCooldown(((AbstractNbtNumber) value).intValue()))),
     POS("Pos", ((player, value) -> {
         NbtList pos = (NbtList) value;
-        player.teleport(player.getServerWorld(), pos.getDouble(0), pos.getDouble(1), pos.getDouble(2), player.getYaw(), player.getPitch());
+        player.teleport(player.getServerWorld(), pos.getDouble(0), pos.getDouble(1), pos.getDouble(2),
+                Set.of(),
+                player.getYaw(), player.getPitch(), false);
     })),
     ROTATION("Rotation", ((player, value) -> {
         NbtList rotation = (NbtList) value;
         player.teleport(player.getServerWorld(), player.getX(), player.getY(), player.getZ(),
-                PositionFlag.ROT, rotation.getFloat(0), rotation.getFloat(1));
+                Set.of(), rotation.getFloat(0), rotation.getFloat(1), false);
     })),
     SILENT("Silent", ((player, value) -> player.setSilent(getBoolean(value)))),
     TAGS("Tags", ((player, value) -> {
@@ -74,13 +75,12 @@ public enum PlayerNbtModifier {
     })),
     TICKS_FROZEN("TicksFrozen",
             ((player, value) -> player.setFrozenTicks(((AbstractNbtNumber) value).intValue()))),
-    ABSORPTION_AMOUNT("AbsorptionAmount", ((player, value) -> player.setAbsorptionAmount(
-            ((AbstractNbtNumber) value).floatValue()))),
+    ABSORPTION_AMOUNT("AbsorptionAmount", ((player, value) -> player.setAbsorptionAmount(((AbstractNbtNumber) value).floatValue()))),
     FALL_FLYING("FallFlying", ((player, value) -> {
         if (getBoolean(value)) {
-            player.startFallFlying();
+            player.startGliding();
         } else {
-            player.stopFallFlying();
+            player.stopGliding();
         }
     })),
     HEALTH("Health",
