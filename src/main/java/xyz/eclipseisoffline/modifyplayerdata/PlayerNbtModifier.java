@@ -115,15 +115,14 @@ public enum PlayerNbtModifier {
         NbtList enderInventory = (NbtList) value;
         player.getEnderChestInventory().readNbtList(enderInventory, player.getRegistryManager());
     }))),
-    FOOD_EXHAUSTION_LEVEL("foodExhaustionLevel", ((player, value) -> player.getHungerManager()
-            .setExhaustion(((AbstractNbtNumber) value).floatValue()))),
+    FOOD_EXHAUSTION_LEVEL("foodExhaustionLevel",
+            ((player, value) -> ((HungerManagerAccessor) player.getHungerManager()).setExhaustion(((AbstractNbtNumber) value).floatValue()))),
     FOOD_LEVEL("foodLevel", ((player, value) -> player.getHungerManager()
             .setFoodLevel(((AbstractNbtNumber) value).intValue()))),
     FOOD_SATURATION_LEVEL("foodSaturationLevel", ((player, value) -> player.getHungerManager()
             .setSaturationLevel(((AbstractNbtNumber) value).floatValue()))),
     FOOD_TICK_TIMER("foodTickTimer",
-            ((player, value) -> ((HungerManagerAccessor) player.getHungerManager()).setFoodTickTimer(
-                    ((AbstractNbtNumber) value).intValue()))),
+            ((player, value) -> ((HungerManagerAccessor) player.getHungerManager()).setFoodTickTimer(((AbstractNbtNumber) value).intValue()))),
     INVENTORY("Inventory", ((player, value) -> {
         NbtList inventory = (NbtList) value;
         player.getInventory().readNbt(inventory);
