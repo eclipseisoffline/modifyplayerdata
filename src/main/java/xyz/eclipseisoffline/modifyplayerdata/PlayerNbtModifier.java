@@ -129,7 +129,7 @@ public enum PlayerNbtModifier {
     })),
     RECIPE_BOOK("recipeBook", ((player, value) -> {
         NbtCompound recipeBook = (NbtCompound) value;
-        player.getRecipeBook().readNbt(recipeBook, Objects.requireNonNull(player.getServer()).getRecipeManager());
+        player.getRecipeBook().readNbt(recipeBook, key -> Objects.requireNonNull(player.getServer()).getRecipeManager().get(key).isPresent());
         player.getRecipeBook().sendInitRecipesPacket(player);
     })),
     SCORE("Score", ((player, value) -> player.setScore(((AbstractNbtNumber) value).intValue()))),
