@@ -76,6 +76,7 @@ public enum PlayerNbtModifier {
     TICKS_FROZEN("TicksFrozen",
             ((player, value) -> player.setFrozenTicks(((AbstractNbtNumber) value).intValue()))),
     ABSORPTION_AMOUNT("AbsorptionAmount", ((player, value) -> player.setAbsorptionAmount(((AbstractNbtNumber) value).floatValue()))),
+    ATTRIBUTES("attributes", (player, element) -> player.getAttributes().readNbt((NbtList) element)),
     FALL_FLYING("FallFlying", ((player, value) -> {
         if (getBoolean(value)) {
             player.startGliding();

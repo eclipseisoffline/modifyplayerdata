@@ -19,7 +19,7 @@ This mod is licensed under GNU LGPLv3.
 
 Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488) and on [Modrinth](https://modrinth.com/mod/modify-player-data).
 
-This mod is currently available for Minecraft 1.21.2, 1.21+1, 1.20.5+6, and 1.20.4. Releases for older versions
+This mod is currently available for Minecraft 1.21.2+3, 1.21+1, 1.20.5+6, and 1.20.4. Releases for older versions
 of Minecraft are generally no longer updated, but should work fine.
 The Fabric API is not required. This mod is not required on clients.
 
@@ -42,6 +42,7 @@ NBT tags currently supported:
 - `Silent`[^9]
 - `TicksFrozen`
 - `AbsorptionAmount`
+- `attributes`
 - `FallFlying`
 - `Health`
 - `HurtTime`[^9]
@@ -73,7 +74,6 @@ NBT tags I won't add support for:
 - `active_effects`[^3]
 - `ArmorDropChances`
 - `ArmorItems`
-- `attributes`[^4]
 - `Brain`
 - `CanPickUpLoot`
 - `DeathLootTable`
