@@ -3,6 +3,9 @@
 ![Modrinth Version](https://img.shields.io/modrinth/v/e706DYY5?logo=modrinth&color=008800)
 ![Modrinth Game Versions](https://img.shields.io/modrinth/game-versions/e706DYY5?logo=modrinth&color=008800)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/e706DYY5?logo=modrinth&color=008800)
+[![Discord Badge](https://img.shields.io/badge/chat-discord-%235865f2)](https://discord.gg/CNNkyWRkqm)
+[![Github Badge](https://img.shields.io/badge/github-modifyplayerdata-white?logo=github)](https://github.com/eclipseisoffline/modifyplayerdata)
+![GitHub License](https://img.shields.io/github/license/eclipseisoffline/modifyplayerdata)
 
 This mod allows Minecraft's data commands (`/data`, `/execute store`, etc.) to modify player data.
 
@@ -15,12 +18,33 @@ Feel free to report any bugs, or suggest new features, at the issue tracker.
 
 This mod is licensed under GNU LGPLv3.
 
+## Donating
+
+If you like this mod, consider [donating](https://buymeacoffee.com/eclipseisoffline).
+
+## Discord
+
+For support and/or any questions you may have, feel free to join [my discord](https://discord.gg/CNNkyWRkqm).
+
+## Version support
+
+| Minecraft Version | Actively developed |
+|-------------------|--------------------|
+| 1.21.4            | ✅ Current          |
+| 1.21.2+3          | ✔️ Available       |
+| 1.21+1            | ✅ Current          |
+| 1.20.5+6          | ✔️ Available       |
+| 1.20.4            | ✔️ Available       |
+
+I try to keep support up for the latest major and latest minor release of Minecraft. Updates to newer Minecraft
+versions may be delayed from time to time, as I do not always have the time to immediately update my mods.
+
+Unsupported versions are still available to download, but they won't receive new features or bugfixes.
+
 ## Usage
 
 Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488) and on [Modrinth](https://modrinth.com/mod/modify-player-data).
 
-This mod is currently available for Minecraft 1.21.2+3, 1.21+1, 1.20.5+6, and 1.20.4. Releases for older versions
-of Minecraft are generally no longer updated, but should work fine.
 The Fabric API is not required. This mod is not required on clients.
 
 ## Supported tags
