@@ -81,7 +81,7 @@ public enum PlayerNbtModifier {
         if (getBoolean(value)) {
             player.startGliding();
         } else {
-            player.stopGliding();
+            player.method_66281();
         }
     })),
     HEALTH("Health",
