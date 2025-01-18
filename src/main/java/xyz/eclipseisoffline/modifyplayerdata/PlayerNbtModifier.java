@@ -59,7 +59,7 @@ public enum PlayerNbtModifier {
         Set<String> currentTags = new HashSet<>(player.getCommandTags());
         for (String currentTag : currentTags) {
             if (!tags.contains(currentTag)) {
-                player.removeCommandTag(currentTag);
+                player.removeScoreboardTag(currentTag);
             }
         }
         for (int i = 0; i < tags.size(); i++) {
