@@ -29,7 +29,7 @@ import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerPlayerEntityAccessor;
 
 public enum PlayerNbtModifier {
     AIR("Air", ((player, value) -> player.setAir(((AbstractNbtNumber) value).shortValue()))),
-    FALL_DISTANCE("FallDistance",
+    FALL_DISTANCE("fall_distance",
             ((player, value) -> player.fallDistance = ((AbstractNbtNumber) value).floatValue())),
     FIRE("Fire",
             ((player, value) -> player.setFireTicks(((AbstractNbtNumber) value).shortValue()))),
@@ -81,7 +81,7 @@ public enum PlayerNbtModifier {
         if (getBoolean(value)) {
             player.startGliding();
         } else {
-            player.method_66281();
+            player.stopGliding();
         }
     })),
     HEALTH("Health",
