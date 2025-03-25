@@ -1,14 +1,16 @@
 package xyz.eclipseisoffline.modifyplayerdata;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.datafixers.util.Pair;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
+
 import net.minecraft.block.entity.SculkShriekerWarningManager;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -16,12 +18,14 @@ import net.minecraft.nbt.AbstractNbtNumber;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Arm;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.HungerManagerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.SculkShriekerWarningManagerAccessor;
@@ -39,23 +43,22 @@ public enum PlayerNbtModifier {
                     getBoolean(value)))),
     INVULNERABLE("Invulnerable", ((player, value) -> player.setInvulnerable(getBoolean(value)))),
     MOTION("Motion", ((player, value) -> {
-        NbtList velocity = (NbtList) value;
-        player.setVelocity(velocity.getDouble(0), velocity.getDouble(1), velocity.getDouble(2));
+        Vec3d velocity = Vec3d.CODEC.parse(NbtOps.INSTANCE, value).result().orElse(Vec3d.ZERO);
+        player.setVelocity(velocity.x, velocity.y, velocity.z);
         player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
     })),
     NO_GRAVITY("NoGravity", ((player, value) -> player.setNoGravity(getBoolean(value)))),
     PORTAL_COOLDOWN("PortalCooldown",
             ((player, value) -> player.setPortalCooldown(((AbstractNbtNumber) value).intValue()))),
     POS("Pos", ((player, value) -> {
-        NbtList pos = (NbtList) value;
-        player.teleport(player.getServerWorld(), pos.getDouble(0), pos.getDouble(1), pos.getDouble(2),
-                Set.of(),
+        Vec3d pos = Vec3d.CODEC.parse(NbtOps.INSTANCE, value).result().orElse(Vec3d.ZERO);
+        player.teleport(player.getServerWorld(), pos.x, pos.y, pos.z, Set.of(),
                 player.getYaw(), player.getPitch(), false);
     })),
     ROTATION("Rotation", ((player, value) -> {
-        NbtList rotation = (NbtList) value;
+        Vec2f rotation = Vec2f.CODEC.parse(NbtOps.INSTANCE, value).result().orElse(Vec2f.ZERO);
         player.teleport(player.getServerWorld(), player.getX(), player.getY(), player.getZ(),
-                Set.of(), rotation.getFloat(0), rotation.getFloat(1), false);
+                Set.of(), rotation.x, rotation.y, false);
     })),
     SILENT("Silent", ((player, value) -> player.setSilent(getBoolean(value)))),
     TAGS("Tags", ((player, value) -> {
@@ -67,7 +70,7 @@ public enum PlayerNbtModifier {
             }
         }
         for (int i = 0; i < tags.size(); i++) {
-            String newTag = tags.getString(i);
+            String newTag = tags.getString(i, "");
             if (!player.getCommandTags().contains(newTag)) {
                 player.addCommandTag(newTag);
             }
@@ -93,22 +96,22 @@ public enum PlayerNbtModifier {
     LEFT_HANDED("LeftHanded",
             ((player, value) -> player.setMainArm(getBoolean(value) ? Arm.LEFT : Arm.RIGHT)),
             ((player, nbt) -> {
-                if (nbt.contains("LeftHanded", NbtElement.BYTE_TYPE)) {
-                    player.setMainArm(nbt.getBoolean("LeftHanded") ? Arm.LEFT : Arm.RIGHT);
+                if (nbt.contains("LeftHanded")) {
+                    player.setMainArm(nbt.getBoolean("LeftHanded", false) ? Arm.LEFT : Arm.RIGHT);
                 }
             }),
             ((player, nbt) -> nbt.putBoolean("LeftHanded", player.getMainArm() == Arm.LEFT))),
     ABILITIES("abilities", ((player, value) -> {
         NbtCompound abilities = (NbtCompound) value;
-        player.getAbilities().flying = abilities.getBoolean("flying");
-        player.getAbilities().setFlySpeed(abilities.getFloat("flySpeed"));
+        player.getAbilities().flying = abilities.getBoolean("flying", false);
+        player.getAbilities().setFlySpeed(abilities.getFloat("flySpeed", 0.05F));
 
-        player.getAbilities().creativeMode = abilities.getBoolean("instabuild");
-        player.getAbilities().invulnerable = abilities.getBoolean("invulnerable");
-        player.getAbilities().allowModifyWorld = abilities.getBoolean("mayBuild");
-        player.getAbilities().allowFlying = abilities.getBoolean("mayfly");
+        player.getAbilities().creativeMode = abilities.getBoolean("instabuild", false);
+        player.getAbilities().invulnerable = abilities.getBoolean("invulnerable", false);
+        player.getAbilities().allowModifyWorld = abilities.getBoolean("mayBuild", true);
+        player.getAbilities().allowFlying = abilities.getBoolean("mayfly", false);
 
-        player.getAbilities().setWalkSpeed(abilities.getFloat("walkSpeed"));
+        player.getAbilities().setWalkSpeed(abilities.getFloat("walkSpeed", 0.1F));
 
         player.sendAbilitiesUpdate();
     })),
@@ -138,15 +141,15 @@ public enum PlayerNbtModifier {
             ((player, value) -> ((ServerPlayerEntityAccessor) player).setSeenCredits(
                     getBoolean(value)))),
     SELECTED_ITEM("SelectedItem", ((player, value) -> {
-        ItemStack item = ItemStack.fromNbt(player.getRegistryManager(), value).orElseThrow(() -> new SimpleCommandExceptionType(Text.of("Error parsing item data")).create());
-        player.getInventory().setStack(player.getInventory().selectedSlot, item);
+        ItemStack item = ItemStack.fromNbt(player.getRegistryManager(), value).orElse(ItemStack.EMPTY);
+        player.getInventory().setStack(player.getInventory().getSelectedSlot(), item);
         player.networkHandler.sendPacket(new EntityEquipmentUpdateS2CPacket(player.getId(),
                 List.of(Pair.of(EquipmentSlot.MAINHAND, item))));
     })),
     SELECTED_ITEM_SLOT("SelectedItemSlot", ((player, value) -> {
         int slot = ((AbstractNbtNumber) value).intValue();
         if (PlayerInventory.isValidHotbarIndex(slot)) {
-            player.getInventory().selectedSlot = slot;
+            player.getInventory().setSelectedSlot(slot);
             player.networkHandler.sendPacket(new UpdateSelectedSlotS2CPacket(slot));
         }
     })),
@@ -155,19 +158,17 @@ public enum PlayerNbtModifier {
     WARDEN_SPAWN_TRACKER("warden_spawn_tracker", ((player, value) -> {
         SculkShriekerWarningManager wardenTracker = player.getSculkShriekerWarningManager().orElseThrow();
         NbtCompound trackerNbt = (NbtCompound) value;
-        wardenTracker.setWarningLevel(trackerNbt.getInt("warning_level"));
-        ((SculkShriekerWarningManagerAccessor) wardenTracker).setCooldownTicks(trackerNbt.getInt("cooldown_ticks"));
-        ((SculkShriekerWarningManagerAccessor) wardenTracker).setTicksSinceLastWarning(trackerNbt.getInt("ticks_since_last_warning"));
+        wardenTracker.setWarningLevel(trackerNbt.getInt("warning_level", 0));
+        ((SculkShriekerWarningManagerAccessor) wardenTracker).setCooldownTicks(trackerNbt.getInt("cooldown_ticks", 0));
+        ((SculkShriekerWarningManagerAccessor) wardenTracker).setTicksSinceLastWarning(trackerNbt.getInt("ticks_since_last_warning", 0));
     })),
-    CUSTOM("CustomData", ((player, value) -> {
-        ((CustomDataHolder) player).modifyPlayerData$setCustomNbtData((NbtCompound) value);
+    CUSTOM("data", ((player, value) -> {
+        player.setComponent(DataComponentTypes.CUSTOM_DATA, NbtComponent.of((NbtCompound) value));
     }), ((player, nbt) -> {
-        if (nbt.contains("CustomData", NbtElement.COMPOUND_TYPE)) {
-            ((CustomDataHolder) player).modifyPlayerData$setCustomNbtData(nbt.getCompound("CustomData"));
+        if (nbt.contains("CustomData")) {
+            player.setComponent(DataComponentTypes.CUSTOM_DATA, NbtComponent.of(nbt.getCompoundOrEmpty("CustomData"))); // Backwards compatibility, does not apply to commands, only to saved data
         }
-    }), ((player, nbt) -> {
-        nbt.put("CustomData", ((CustomDataHolder) player).modifyPlayerData$getCustomNbtData());
-    }));
+    }), ((player, nbt) -> {}));
 
     private final String key;
     private final NbtApplier action;

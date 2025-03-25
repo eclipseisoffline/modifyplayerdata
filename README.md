@@ -9,9 +9,6 @@
 
 This mod allows Minecraft's data commands (`/data`, `/execute store`, etc.) to modify player data.
 
-Alongside supporting most vanilla player NBT tags, this mod also adds the `CustomData` NBT tag,
-which can be used to store any type of NBT data on a per-player basis.
-
 Feel free to report any bugs, or suggest new features, at the issue tracker.
 
 ## License
@@ -30,7 +27,8 @@ For support and/or any questions you may have, feel free to join [my discord](ht
 
 | Minecraft Version | Status       |
 |-------------------|--------------|
-| 1.21.4            | ✅ Current    |
+| 1.21.5            | ✅ Current    |
+| 1.21.4            | ✔️ Available |
 | 1.21.2+3          | ✔️ Available |
 | 1.21+1            | ✅ Current    |
 | 1.20.5+6          | ✔️ Available |
@@ -44,7 +42,7 @@ Unsupported versions are still available to download, but they won't receive new
 
 ## Usage
 
-Mod builds can be found [here](https://github.com/eclipseisoffline/modifyplayerdata/packages/2069488) and on [Modrinth](https://modrinth.com/mod/modify-player-data).
+Mod builds can be found on the releases page, as well as on [Modrinth](https://modrinth.com/mod/modify-player-data).
 
 The Fabric API is not required. This mod is not required on clients.
 
@@ -86,8 +84,7 @@ NBT tags currently supported:
 - `SelectedItemSlot`
 - `SleepTimer`
 - `warden_spawn_tracker`
-- `CustomData`
-  - This tag doesn't exist in vanilla Minecraft, and doesn't do anything. It can be used by datapack creators to store custom NBT data.
+- `data`
 
 NBT tags I won't add support for:
 
