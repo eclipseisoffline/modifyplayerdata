@@ -7,6 +7,7 @@
     "EntityDataObjectMixin",
     "EntityMixin",
     "HungerManagerAccessor",
+    "LivingEntityAccessor",
     "PlayerEntityAccessor",
     "SculkShriekerWarningManagerAccessor",
     "ServerPlayerEntityAccessor",

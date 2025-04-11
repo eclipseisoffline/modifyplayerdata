@@ -51,7 +51,7 @@ The Fabric API is not required. This mod is not required on clients.
 NBT tags currently supported:
 
 - `Air`
-- `FallDistance`
+- `fall_distance`
 - `Fire`
 - `Glowing`
 - `HasVisualFire`
@@ -62,13 +62,14 @@ NBT tags currently supported:
 - `Pos`
 - `Rotation`
 - `Tags`
-- `Silent`[^9]
+- `Silent`[^7]
 - `TicksFrozen`
 - `AbsorptionAmount`
 - `attributes`
+- `equipment`
 - `FallFlying`
 - `Health`
-- `HurtTime`[^9]
+- `HurtTime`[^7]
 - `LeftHanded`
 - `abilities`
 - `EnderItems`
@@ -93,50 +94,36 @@ NBT tags I won't add support for:
 - `OnGround`
 - `Passengers`[^1]
 - `UUID`
-- `active_effects`[^3]
-- `ArmorDropChances`
-- `ArmorItems`
-- `Brain`
-- `CanPickUpLoot`
-- `DeathLootTable`
-- `DeathLootTableSeed`
+- `active_effects`[^2]
 - `DeathTime`
-- `FallFlying`
-- `HurtByTimestamp`
-- `HandDropChances`
-- `HandItems`
-- `Leash`
-- `NoAI`
-- `PersistenceRequired`
-- `SleepingX`
-- `SleepingY`
-- `SleepingZ`
-- `DataVersion`
-- `Dimension`[^2]
-- `enteredNetherPosition`[^10]
-- `LastDeathLocation`[^8]
-- `playerGameType`[^7]
-- `previousPlayerGameType`[^7]
-- `RootVehicle`[^1]
+- `HurtByTimestamp`[^8]
+- `Team`[^5]
+- `sleeping_pos`
+- `Brain`
+- `last_hurt_by_player`[^8]
+- `last_hurt_by_player_memory_time`[^8]
+- `last_hurt_by_mob`[^8]
+- `ticks_since_last_hurt_by_mob`[^8]
+- `XpLevel`[^4]
+- `XpP`[^4]
+- `XpSeed`[^8]
+- `XpTotal`[^4]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
-- `SpawnDimension`[^5]
-- `SpawnForced`[^10]
-- `SpawnX`[^5]
-- `SpawnY`[^5]
-- `SpawnZ`[^5]
-- `XpLevel`[^6]
-- `XpP`[^6]
-- `XpSeed`[^10]
-- `XpTotal`[^6]
+- `LastDeathLocation`[^6]
+- `current_explosion_impact_pos` [^8]
+- `ignore_fall_damage_from_current_explosion` [^8]
+- `current_impulse_context_reset_grace_time` [^8]
+- `entered_nether_pos`[^8]
+- `respawn` [^3]
+- `spawn_extra_particles_on_fall` [^8]
+- `raid_omen_position` [^8]
 
 [^1]: Use the `/ride` command.
-[^2]: Use the `/tp` command.
-[^3]: Use the `/effect` command.
-[^4]: Use the `/attribute` command.
-[^5]: Use the `/spawnpoint` command.
-[^6]: Use the `/xp` command.
-[^7]: Use the `/gamemode` command.
-[^8]: Unable to implement due to limitations within the vanilla client.
-[^9]: Is implemented but does not do much due to limitations within the vanilla client
-[^10]: I can't think of any use cases for this tag, but will add support on request.
+[^2]: Use the `/effect` command.
+[^3]: Use the `/spawnpoint` command.
+[^4]: Use the `/xp` command.
+[^5]: Use the `/team` command.
+[^6]: Unable to implement due to limitations within the vanilla client.
+[^7]: Is implemented but does not do much due to limitations within the vanilla client
+[^8]: I can't think of any use cases for this tag, but will add support on request.

@@ -11,6 +11,7 @@ import java.util.function.BiConsumer;
 import net.minecraft.block.entity.SculkShriekerWarningManager;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.entity.EntityEquipment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -22,18 +23,20 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.UpdateSelectedSlotS2CPacket;
+import net.minecraft.registry.RegistryOps;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.HungerManagerAccessor;
+import xyz.eclipseisoffline.modifyplayerdata.mixin.LivingEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.SculkShriekerWarningManagerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerPlayerEntityAccessor;
 
 public enum PlayerNbtModifier {
     AIR("Air", ((player, value) -> player.setAir(((AbstractNbtNumber) value).shortValue()))),
-    FALL_DISTANCE("FallDistance",
+    FALL_DISTANCE("fall_distance",
             ((player, value) -> player.fallDistance = ((AbstractNbtNumber) value).floatValue())),
     FIRE("Fire",
             ((player, value) -> player.setFireTicks(((AbstractNbtNumber) value).shortValue()))),
@@ -80,6 +83,9 @@ public enum PlayerNbtModifier {
             ((player, value) -> player.setFrozenTicks(((AbstractNbtNumber) value).intValue()))),
     ABSORPTION_AMOUNT("AbsorptionAmount", ((player, value) -> player.setAbsorptionAmount(((AbstractNbtNumber) value).floatValue()))),
     ATTRIBUTES("attributes", (player, element) -> player.getAttributes().readNbt((NbtList) element)),
+    EQUIPMENT("equipment", (player, element) -> {
+        ((LivingEntityAccessor) player).getEquipment().copyFrom(EntityEquipment.CODEC.parse(RegistryOps.of(NbtOps.INSTANCE, player.getRegistryManager()), element).getOrThrow());
+    }),
     FALL_FLYING("FallFlying", ((player, value) -> {
         if (getBoolean(value)) {
             player.startGliding();
