@@ -1,2 +1,13 @@
-- Add support for the `equipment` NBT tag.
-- Properly read fall distance from the `fall_distance` tag instead of the old `FallDistance` tag.
+- Updated to 1.21.6.
+- Added support for the following data keys:
+  - `last_hurt_by_player`
+  - `last_hurt_by_player_memory_time`
+  - `last_hurt_by_mob`
+  - `ticks_since_last_hurt_by_mob`
+  - `current_explosion_impact_pos`
+  - `ignore_fall_damage_from_current_explosion`
+  - `current_impulse_context_reset_grace_time`
+  - `entered_nether_pos`
+  - `respawn`
+  - `spawn_extra_particles_on_fall`
+  - `raid_omen_position`

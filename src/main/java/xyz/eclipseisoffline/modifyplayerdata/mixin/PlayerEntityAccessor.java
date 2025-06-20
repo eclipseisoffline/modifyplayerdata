@@ -9,4 +9,10 @@ public interface PlayerEntityAccessor {
 
     @Accessor
     void setSleepTimer(int sleepTimer);
+
+    @Accessor("ignoreFallDamageFromCurrentExplosion")
+    void setIgnoreFallDamageFromCurrentExplosionRaw(boolean ignoreFallDamageFromCurrentExplosion);
+
+    @Accessor
+    void setCurrentExplosionResetGraceTime(int currentExplosionResetGraceTime);
 }

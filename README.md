@@ -27,7 +27,8 @@ For support and/or any questions you may have, feel free to join [my discord](ht
 
 | Minecraft Version | Status       |
 |-------------------|--------------|
-| 1.21.5            | ✅ Current    |
+| 1.21.6            | ✅ Current    |
+| 1.21.5            | ✔️ Available |
 | 1.21.4            | ✔️ Available |
 | 1.21.2+3          | ✔️ Available |
 | 1.21+1            | ✅ Current    |
@@ -50,80 +51,84 @@ The Fabric API is not required. This mod is not required on clients.
 
 NBT tags currently supported:
 
-- `Air`
+- `Pos`
+- `Motion`
+- `Rotation`
 - `fall_distance`
 - `Fire`
-- `Glowing`
-- `HasVisualFire`
+- `Air`
 - `Invulnerable`
-- `Motion`
-- `NoGravity`
 - `PortalCooldown`
-- `Pos`
-- `Rotation`
-- `Tags`
-- `Silent`[^7]
+- `Silent`[^1]
+- `NoGravity`
+- `Glowing`
 - `TicksFrozen`
+- `HasVisualFire`
+- `Tags`
+- `data`
+- `Health`
+- `HurtTime`[^1]
 - `AbsorptionAmount`
 - `attributes`
-- `equipment`
 - `FallFlying`
-- `Health`
-- `HurtTime`[^7]
+- `last_hurt_by_player`
+- `last_hurt_by_player_memory_time`
+- `last_hurt_by_mob`
+- `ticks_since_last_hurt_by_mob`
+- `equipment`
 - `LeftHanded`
-- `abilities`
-- `EnderItems`
-- `foodExhaustionLevel`
-- `foodLevel`
-- `foodSaturationLevel`
-- `foodTickTimer`
 - `Inventory`
-- `recipeBook`
-- `Score`
-- `seenCredits`
 - `SelectedItem`
 - `SelectedItemSlot`
 - `SleepTimer`
+- `Score`
+- `foodLevel`
+- `foodTickTimer`
+- `foodSaturationLevel`
+- `foodExhaustionLevel`
+- `abilities`
+- `EnderItems`
+- `current_explosion_impact_pos`
+- `ignore_fall_damage_from_current_explosion`
+- `current_impulse_context_reset_grace_time`
 - `warden_spawn_tracker`
-- `data`
+- `entered_nether_pos`
+- `seenCredits`
+- `respawn`
+- `spawn_extra_particles_on_fall`
+- `raid_omen_position`
 
 NBT tags I won't add support for:
 
+- `OnGround`
+- `UUID`
 - `CustomName`
 - `CustomNameVisible`
-- `OnGround`
-- `Passengers`[^1]
-- `UUID`
-- `active_effects`[^2]
+- `Passengers`[^2]
 - `DeathTime`
-- `HurtByTimestamp`[^8]
-- `Team`[^5]
+- `active_effects`[^3]
 - `sleeping_pos`
 - `Brain`
-- `last_hurt_by_player`[^8]
-- `last_hurt_by_player_memory_time`[^8]
-- `last_hurt_by_mob`[^8]
-- `ticks_since_last_hurt_by_mob`[^8]
-- `XpLevel`[^4]
-- `XpP`[^4]
-- `XpSeed`[^8]
-- `XpTotal`[^4]
+- `locator_bar_icon`[^4]
+- `XpP`[^5]
+- `XpLevel`[^5]
+- `XpTotal`[^5]
+- `XpSeed`[^6]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
-- `LastDeathLocation`[^6]
-- `current_explosion_impact_pos` [^8]
-- `ignore_fall_damage_from_current_explosion` [^8]
-- `current_impulse_context_reset_grace_time` [^8]
-- `entered_nether_pos`[^8]
-- `respawn` [^3]
-- `spawn_extra_particles_on_fall` [^8]
-- `raid_omen_position` [^8]
+- `LastDeathLocation`[^7]
+- `playerGameType`
+- `previousPlayerGameType`[^7]
+- `RootVehicle`[^2]
+- `recipeBook`[^8]
+- `Dimension`
+- `ender_pearls`
 
-[^1]: Use the `/ride` command.
-[^2]: Use the `/effect` command.
-[^3]: Use the `/spawnpoint` command.
-[^4]: Use the `/xp` command.
-[^5]: Use the `/team` command.
-[^6]: Unable to implement due to limitations within the vanilla client.
-[^7]: Is implemented but does not do much due to limitations within the vanilla client
-[^8]: I can't think of any use cases for this tag, but will add support on request.
+[^1]: Is implemented but does not do much due to limitations within the vanilla client
+[^2]: Use the `/ride` command.
+[^3]: Use the `/effect` command.
+[^4]: Use the `/waypoint` command.
+[^5]: Use the `/xp` command.
+[^6]: I can't think of any use cases for this tag, but will add support on request.
+[^7]: Unable to implement due to limitations within the vanilla client.
+[^8]: Use the `/recipe` command.
