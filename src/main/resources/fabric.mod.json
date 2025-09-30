@@ -3,7 +3,7 @@
   "id": "modifyplayerdata",
   "version": "${version}",
   "name": "Modify Player Data",
-  "description": "",
+  "description": "Modify Player Data allows Minecraft's data commands (/data, /execute store, etc.) to modify player data",
   "authors": [
     {
       "name": "eclipseisoffline",
