@@ -46,7 +46,7 @@ public class PlayerData {
 
     public static void apply(ServerPlayerEntity player, ReadView view) {
         // Entity data
-        view.read("Pos", Vec3d.CODEC).ifPresent(pos -> player.teleport(player.getWorld(), pos.x, pos.y, pos.z, Set.of(),
+        view.read("Pos", Vec3d.CODEC).ifPresent(pos -> player.teleport(player.getEntityWorld(), pos.x, pos.y, pos.z, Set.of(),
                 player.getYaw(), player.getPitch(), false));
 
         view.read("Motion", Vec3d.CODEC).ifPresent(motion -> {
@@ -54,7 +54,7 @@ public class PlayerData {
             player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
         });
 
-        view.read("Rotation", Vec2f.CODEC).ifPresent(rotation -> player.teleport(player.getWorld(), player.getX(), player.getY(), player.getZ(),
+        view.read("Rotation", Vec2f.CODEC).ifPresent(rotation -> player.teleport(player.getEntityWorld(), player.getX(), player.getY(), player.getZ(),
                 Set.of(), rotation.x, rotation.y, false));
 
         getOptionalDouble(view, "fall_distance").ifPresent(fallDistance -> player.fallDistance = fallDistance);
