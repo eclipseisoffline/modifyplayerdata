@@ -1,1 +1,1 @@
-- Updated to 1.21.10.
+- Fix custom data not copying upon player death.
