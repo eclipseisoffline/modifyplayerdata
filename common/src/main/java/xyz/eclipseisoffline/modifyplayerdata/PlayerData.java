@@ -70,16 +70,14 @@ public class PlayerData {
 
         input.list("Tags", Codec.STRING).ifPresent(stream -> {
             List<String> tags = stream.stream().toList();
-            Set<String> currentTags = new HashSet<>(player.getTags());
+            Set<String> currentTags = new HashSet<>(player.entityTags());
             for (String currentTag : currentTags) {
                 if (!tags.contains(currentTag)) {
                     player.removeTag(currentTag);
                 }
             }
             for (String newTag : tags) {
-                if (!player.getTags().contains(newTag)) {
-                    player.addTag(newTag);
-                }
+                player.addTag(newTag);
             }
         });
 

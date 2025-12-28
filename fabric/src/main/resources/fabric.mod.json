@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "modifyplayerdata",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "Modify Player Data",
-  "description": "Modify Player Data allows Minecraft's data commands (/data, /execute store, etc.) to modify player data",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
   "authors": [
     {
       "name": "eclipseisoffline",
@@ -18,15 +18,14 @@
     "sources": "https://github.com/eclipseisoffline/modifyplayerdata"
   },
   "license": "LGPL-3.0-only",
-  "icon": "assets/modifyplayerdata/icon.png",
+  "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
-  "entrypoints": {},
   "mixins": [
     "modifyplayerdata.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=${loader_version}",
-    "minecraft": "${supported_versions}"
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "${minecraft_version}"
   },
   "custom": {
     "modmenu": {
