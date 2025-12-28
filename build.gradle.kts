@@ -17,7 +17,6 @@ multimod {
     minecraft {
         minecraft = libs.minecraft
         supported(libs.versions.minecraft.release)
-        supportedMinecraftVersions = "*" // TODO remove after snapshots
     }
 
     fabricApi = libs.fabric.api

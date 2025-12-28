@@ -1,5 +1,5 @@
 [versions]
-multimod = "0.2.0"
+multimod = "0.2.1"
 
 minecraft = "26.1-snapshot-1"
 minecraft-release = "26.1-snapshot-1"
