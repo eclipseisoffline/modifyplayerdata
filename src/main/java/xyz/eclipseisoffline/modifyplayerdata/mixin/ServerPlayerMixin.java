@@ -14,20 +14,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.eclipseisoffline.modifyplayerdata.PlayerData;
 
 @Mixin(ServerPlayer.class)
-public abstract class ServerPlayerEntityMixin extends Player {
+public abstract class ServerPlayerMixin extends Player {
 
-    public ServerPlayerEntityMixin(Level world, GameProfile profile) {
-        super(world, profile);
+    public ServerPlayerMixin(Level level, GameProfile profile) {
+        super(level, profile);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    public void readExtraCustomData(ValueInput view, CallbackInfo callbackInfo) {
-        PlayerData.read((ServerPlayer) (Object) this, view);
+    public void readExtraCustomData(ValueInput input, CallbackInfo callbackInfo) {
+        PlayerData.read((ServerPlayer) (Object) this, input);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    public void writeExtraCustomData(ValueOutput view, CallbackInfo callbackInfo) {
-        PlayerData.write((ServerPlayer) (Object) this, view);
+    public void writeExtraCustomData(ValueOutput output, CallbackInfo callbackInfo) {
+        PlayerData.write((ServerPlayer) (Object) this, output);
     }
 
     @Inject(method = "restoreFrom", at = @At("TAIL"))

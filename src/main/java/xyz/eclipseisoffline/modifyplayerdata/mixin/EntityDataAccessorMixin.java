@@ -20,7 +20,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.TagValueInput;
 
 @Mixin(EntityDataAccessor.class)
-public class EntityDataObjectMixin {
+public class EntityDataAccessorMixin {
 
     @Shadow
     @Final

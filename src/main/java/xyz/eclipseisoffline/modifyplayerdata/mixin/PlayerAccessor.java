@@ -5,14 +5,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Player.class)
-public interface PlayerEntityAccessor {
+public interface PlayerAccessor {
 
     @Accessor
-    void setSleepCounter(int sleepTimer);
+    void setSleepCounter(int sleepCounter);
 
     @Accessor("ignoreFallDamageFromCurrentImpulse")
-    void setIgnoreFallDamageFromCurrentExplosionRaw(boolean ignoreFallDamageFromCurrentExplosion);
+    void setIgnoreFallDamageFromCurrentImpulseRaw(boolean ignoreFallDamageFromCurrentImpulse);
 
     @Accessor
-    void setCurrentImpulseContextResetGraceTime(int currentExplosionResetGraceTime);
+    void setCurrentImpulseContextResetGraceTime(int currentImpulseContextResetGraceTime);
 }

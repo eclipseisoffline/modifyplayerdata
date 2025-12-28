@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(FoodData.class)
-public interface HungerManagerAccessor {
+public interface FoodDataAccessor {
 
     @Accessor
     void setTickTimer(int foodTickTimer);
