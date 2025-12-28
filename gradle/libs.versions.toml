@@ -2,7 +2,7 @@
 multimod = "0.2.0"
 
 minecraft = "26.1-snapshot-1"
-minecraft-release = "26.1"
+minecraft-release = "26.1-snapshot-1"
 
 fabric-api = "0.140.2+26.1"
 
