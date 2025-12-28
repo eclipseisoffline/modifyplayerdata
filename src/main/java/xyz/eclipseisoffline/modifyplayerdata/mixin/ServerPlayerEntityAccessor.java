@@ -1,19 +1,19 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
-import net.minecraft.block.entity.SculkShriekerWarningManager;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.monster.warden.WardenSpawnTracker;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(ServerPlayerEntity.class)
+@Mixin(ServerPlayer.class)
 public interface ServerPlayerEntityAccessor {
 
     @Accessor
-    void setSculkShriekerWarningManager(SculkShriekerWarningManager manager);
+    void setWardenSpawnTracker(WardenSpawnTracker manager);
 
     @Accessor
-    void setEnteredNetherPos(Vec3d enteredNetherPos);
+    void setEnteredNetherPosition(Vec3 enteredNetherPos);
 
     @Accessor
     void setSeenCredits(boolean seenCredits);

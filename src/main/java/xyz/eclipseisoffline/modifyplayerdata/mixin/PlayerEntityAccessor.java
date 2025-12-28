@@ -1,18 +1,18 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(PlayerEntity.class)
+@Mixin(Player.class)
 public interface PlayerEntityAccessor {
 
     @Accessor
-    void setSleepTimer(int sleepTimer);
+    void setSleepCounter(int sleepTimer);
 
-    @Accessor("ignoreFallDamageFromCurrentExplosion")
+    @Accessor("ignoreFallDamageFromCurrentImpulse")
     void setIgnoreFallDamageFromCurrentExplosionRaw(boolean ignoreFallDamageFromCurrentExplosion);
 
     @Accessor
-    void setCurrentExplosionResetGraceTime(int currentExplosionResetGraceTime);
+    void setCurrentImpulseContextResetGraceTime(int currentExplosionResetGraceTime);
 }

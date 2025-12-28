@@ -1,12 +1,5 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
-import net.minecraft.command.EntityDataObject;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.predicate.NbtPredicate;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.storage.NbtReadView;
-import net.minecraft.util.ErrorReporter;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,8 +11,15 @@ import xyz.eclipseisoffline.modifyplayerdata.PlayerData;
 
 import java.util.HashSet;
 import java.util.Set;
+import net.minecraft.advancements.criterion.NbtPredicate;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.commands.data.EntityDataAccessor;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.TagValueInput;
 
-@Mixin(EntityDataObject.class)
+@Mixin(EntityDataAccessor.class)
 public class EntityDataObjectMixin {
 
     @Shadow
@@ -30,20 +30,20 @@ public class EntityDataObjectMixin {
     @Final
     private Entity entity;
 
-    @Inject(method = "setNbt", at = @At("HEAD"), cancellable = true)
-    public void setPlayerNbt(NbtCompound newNbt, CallbackInfo callbackInfo) {
-        if (entity instanceof ServerPlayerEntity player) {
-            NbtCompound oldNbt = NbtPredicate.entityToNbt(entity);
+    @Inject(method = "setData", at = @At("HEAD"), cancellable = true)
+    public void setPlayerNbt(CompoundTag newNbt, CallbackInfo callbackInfo) {
+        if (entity instanceof ServerPlayer player) {
+            CompoundTag oldNbt = NbtPredicate.getEntityTagToCompare(entity);
 
-            Set<String> keys = new HashSet<>(newNbt.getKeys());
+            Set<String> keys = new HashSet<>(newNbt.keySet());
             for (String key : keys) {
                 if (newNbt.get(key).equals(oldNbt.get(key))) {
                     newNbt.remove(key);
                 }
             }
 
-            try (ErrorReporter.Logging logging = new ErrorReporter.Logging(this.entity.getErrorReporterContext(), LOGGER)) {
-                PlayerData.apply(player, NbtReadView.create(logging, player.getRegistryManager(), newNbt));
+            try (ProblemReporter.ScopedCollector logging = new ProblemReporter.ScopedCollector(this.entity.problemPath(), LOGGER)) {
+                PlayerData.apply(player, TagValueInput.create(logging, player.registryAccess(), newNbt));
             }
             callbackInfo.cancel();
         }

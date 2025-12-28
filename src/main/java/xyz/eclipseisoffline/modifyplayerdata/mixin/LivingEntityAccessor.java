@@ -1,9 +1,9 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
-import net.minecraft.entity.EntityEquipment;
-import net.minecraft.entity.LazyEntityReference;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.EntityEquipment;
+import net.minecraft.world.entity.EntityReference;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -15,11 +15,11 @@ public interface LivingEntityAccessor {
     EntityEquipment getEquipment();
 
     @Invoker
-    void invokeSetAttacking(LazyEntityReference<PlayerEntity> attackingPlayer, int playerHitTimer);
+    void invokeSetLastHurtByPlayer(EntityReference<Player> attackingPlayer, int playerHitTimer);
 
     @Accessor
-    void setAttackerReference(LazyEntityReference<LivingEntity> attacker);
+    void setLastHurtByMob(EntityReference<LivingEntity> attacker);
 
     @Accessor
-    void setLastAttackedTime(int lastAttackedTime);
+    void setLastHurtByMobTimestamp(int lastAttackedTime);
 }
