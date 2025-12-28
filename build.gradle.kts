@@ -19,7 +19,6 @@ multimod {
         supported(libs.versions.minecraft.release)
     }
 
-    fabricApi = libs.fabric.api
     neoForgeVersion = libs.versions.neoforge
 
     modPublishOptions {
