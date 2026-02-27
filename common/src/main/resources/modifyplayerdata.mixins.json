@@ -11,7 +11,8 @@
     "LivingEntityAccessor",
     "PlayerAccessor",
     "ServerPlayerAccessor",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "ServerRecipeBookAccessor"
   ],
   "client": [
   ],

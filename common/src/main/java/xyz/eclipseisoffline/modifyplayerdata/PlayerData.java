@@ -4,12 +4,17 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.stats.ServerRecipeBook;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.FoodDataAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.LivingEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerPlayerAccessor;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +42,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerRecipeBookAccessor;
 
 public class PlayerData {
 
@@ -172,6 +178,17 @@ public class PlayerData {
         input.read("warden_spawn_tracker", WardenSpawnTracker.CODEC).ifPresent(manager -> ((ServerPlayerAccessor) player).setWardenSpawnTracker(manager));
         input.read("entered_nether_pos", Vec3.CODEC).ifPresent(pos -> ((ServerPlayerAccessor) player).setEnteredNetherPosition(pos));
         getOptionalBoolean(input, "seenCredits").ifPresent(seenCredits -> ((ServerPlayerAccessor) player).setSeenCredits(seenCredits));
+
+        input.read("recipeBook", ServerRecipeBook.Packed.CODEC).ifPresent(packed -> {
+            Set<ResourceKey<Recipe<?>>> known = ((ServerRecipeBookAccessor) player.getRecipeBook()).getKnown();
+
+            // Not the most efficient, but it gets the job done, annoying to do otherwise
+            player.getRecipeBook().removeRecipes((Collection) known.stream().map(recipe -> new RecipeHolder<>(recipe, null)).toList(), player);
+
+            player.getRecipeBook().loadUntrusted(packed, id -> player.level().getServer().getRecipeManager().byKey(id).isPresent());
+            player.getRecipeBook().sendInitialRecipeBook(player);
+        });
+
         input.read("respawn", ServerPlayer.RespawnConfig.CODEC).ifPresent(respawn -> player.setRespawnPosition(respawn, false));
         getOptionalBoolean(input, "spawn_extra_particles_on_fall").ifPresent(player::setSpawnExtraParticlesOnFall);
         input.read("raid_omen_position", BlockPos.CODEC).ifPresent(player::setRaidOmenPosition);

@@ -101,6 +101,7 @@ NBT tags currently supported:
 - `warden_spawn_tracker`
 - `entered_nether_pos`
 - `seenCredits`
+- `recipeBook`
 - `respawn`
 - `spawn_extra_particles_on_fall`
 - `raid_omen_position`
@@ -126,7 +127,6 @@ NBT tags I won't add support for:
 - `playerGameType`
 - `previousPlayerGameType`[^6]
 - `RootVehicle`[^2]
-- `recipeBook`[^7]
 - `Dimension`
 - `ender_pearls`
 
@@ -136,4 +136,3 @@ NBT tags I won't add support for:
 [^4]: Use the `/xp` command.
 [^5]: I can't think of any use cases for this tag, but will add support on request.
 [^6]: Unable to implement due to limitations within the vanilla client.
-[^7]: Use the `/recipe` command.
