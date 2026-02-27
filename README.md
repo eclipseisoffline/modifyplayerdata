@@ -52,7 +52,7 @@ NeoForge ports are available for Minecraft 26.1 onwards.
 
 Mod builds can be found on the releases page, as well as on [Modrinth](https://modrinth.com/mod/modify-player-data).
 
-The Fabric API is not required. This mod is not required on clients.
+The Fabric API is not required on Fabric. This mod is not required on clients.
 
 ## Supported tags
 
@@ -76,7 +76,10 @@ NBT tags currently supported:
 - `Health`
 - `HurtTime`[^1]
 - `AbsorptionAmount`
+- `active_effects`
 - `attributes`
+- `current_explosion_impact_pos`
+- `current_impulse_context_reset_grace_time`
 - `FallFlying`
 - `last_hurt_by_player`
 - `last_hurt_by_player_memory_time`
@@ -95,9 +98,6 @@ NBT tags currently supported:
 - `foodExhaustionLevel`
 - `abilities`
 - `EnderItems`
-- `current_explosion_impact_pos`
-- `ignore_fall_damage_from_current_explosion`
-- `current_impulse_context_reset_grace_time`
 - `warden_spawn_tracker`
 - `entered_nether_pos`
 - `seenCredits`
@@ -113,29 +113,27 @@ NBT tags I won't add support for:
 - `CustomNameVisible`
 - `Passengers`[^2]
 - `DeathTime`
-- `active_effects`[^3]
 - `sleeping_pos`
 - `Brain`
-- `locator_bar_icon`[^4]
-- `XpP`[^5]
-- `XpLevel`[^5]
-- `XpTotal`[^5]
-- `XpSeed`[^6]
+- `locator_bar_icon`[^3]
+- `XpP`[^4]
+- `XpLevel`[^4]
+- `XpTotal`[^4]
+- `XpSeed`[^5]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
-- `LastDeathLocation`[^7]
+- `LastDeathLocation`[^6]
 - `playerGameType`
-- `previousPlayerGameType`[^7]
+- `previousPlayerGameType`[^6]
 - `RootVehicle`[^2]
-- `recipeBook`[^8]
+- `recipeBook`[^7]
 - `Dimension`
 - `ender_pearls`
 
 [^1]: Is implemented but does not do much due to limitations within the vanilla client
 [^2]: Use the `/ride` command.
-[^3]: Use the `/effect` command.
-[^4]: Use the `/waypoint` command.
-[^5]: Use the `/xp` command.
-[^6]: I can't think of any use cases for this tag, but will add support on request.
-[^7]: Unable to implement due to limitations within the vanilla client.
-[^8]: Use the `/recipe` command.
+[^3]: Use the `/waypoint` command.
+[^4]: Use the `/xp` command.
+[^5]: I can't think of any use cases for this tag, but will add support on request.
+[^6]: Unable to implement due to limitations within the vanilla client.
+[^7]: Use the `/recipe` command.

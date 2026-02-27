@@ -14,6 +14,9 @@ public interface LivingEntityAccessor {
     @Accessor
     EntityEquipment getEquipment();
 
+    @Accessor
+    void setEffectsDirty(boolean effectsDirty);
+
     @Invoker
     void invokeSetLastHurtByPlayer(EntityReference<Player> attackingPlayer, int playerHitTimer);
 
@@ -22,4 +25,7 @@ public interface LivingEntityAccessor {
 
     @Accessor
     void setLastHurtByMobTimestamp(int lastAttackedTime);
+
+    @Accessor
+    void setCurrentImpulseContextResetGraceTime(int currentImpulseContextResetGraceTime);
 }

@@ -1,8 +1,8 @@
 [versions]
-multimod = "0.2.1"
+multimod = "0.2.4"
 
-minecraft = "26.1-snapshot-1"
-minecraft-release = "26.1-snapshot-1"
+minecraft = "26.1-snapshot-10"
+minecraft-release = "26.1-snapshot-10"
 
 neoforge = "26.1.0.0-alpha.2+snapshot-1"
 

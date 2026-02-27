@@ -9,10 +9,4 @@ public interface PlayerAccessor {
 
     @Accessor
     void setSleepCounter(int sleepCounter);
-
-    @Accessor("ignoreFallDamageFromCurrentImpulse")
-    void setIgnoreFallDamageFromCurrentImpulseRaw(boolean ignoreFallDamageFromCurrentImpulse);
-
-    @Accessor
-    void setCurrentImpulseContextResetGraceTime(int currentImpulseContextResetGraceTime);
 }

@@ -2,6 +2,9 @@ package xyz.eclipseisoffline.modifyplayerdata;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket;
+import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
+import net.minecraft.world.effect.MobEffectInstance;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.FoodDataAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.LivingEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerAccessor;
@@ -93,6 +96,18 @@ public class PlayerData {
         getOptionalFloat(input, "AbsorptionAmount").ifPresent(player::setAbsorptionAmount);
         input.read("attributes", AttributeInstance.Packed.LIST_CODEC).ifPresent(player.getAttributes()::apply);
 
+        input.read("active_effects", MobEffectInstance.CODEC.listOf()).ifPresent(effects -> {
+            for (MobEffectInstance current : player.getActiveEffects()) {
+                player.connection.send(new ClientboundRemoveMobEffectPacket(player.getId(), current.getEffect()));
+            }
+            player.getActiveEffectsMap().clear();
+            for (MobEffectInstance effect : effects) {
+                player.getActiveEffectsMap().put(effect.getEffect(), effect);
+                player.connection.send(new ClientboundUpdateMobEffectPacket(player.getId(), effect, false));
+            }
+            ((LivingEntityAccessor) player).setEffectsDirty(true);
+        });
+
         getOptionalBoolean(input, "FallFlying").ifPresent(fallFlying -> {
             if (fallFlying) {
                 player.startFallFlying();
@@ -150,8 +165,7 @@ public class PlayerData {
         input.list("EnderItems", ItemStackWithSlot.CODEC).ifPresent(player.getEnderChestInventory()::fromSlots);
 
         input.read("current_explosion_impact_pos", Vec3.CODEC).ifPresent(pos -> player.currentImpulseImpactPos = pos);
-        getOptionalBoolean(input, "ignore_fall_damage_from_current_explosion").ifPresent(ignoreDamage -> ((PlayerAccessor) player).setIgnoreFallDamageFromCurrentImpulseRaw(ignoreDamage));
-        input.getInt("current_impulse_context_reset_grace_time").ifPresent(time -> ((PlayerAccessor) player).setCurrentImpulseContextResetGraceTime(time));
+        input.getInt("current_impulse_context_reset_grace_time").ifPresent(time -> ((LivingEntityAccessor) player).setCurrentImpulseContextResetGraceTime(time));
 
 
         // Server player data
