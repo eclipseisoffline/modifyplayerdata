@@ -14,15 +14,8 @@ description='''${mod_description}'''
 config="modifyplayerdata.mixins.json"
 
 [[dependencies]]
-    modId="neoforge"
-    type="required"
-    versionRange="${neoforge_version}"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies]]
-    modId="minecraft"
-    type="required"
-    versionRange="${neoforge_minecraft_version}"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+type="required"
+versionRange="${neoforge_minecraft_version}"
+ordering="NONE"
+side="BOTH"

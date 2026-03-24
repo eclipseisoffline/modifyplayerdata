@@ -22,4 +22,4 @@ pluginManagement {
 
 rootProject.name = "ModifyPlayerData"
 
-include("common", "fabric")
+include("common", "fabric", "neoforge")
