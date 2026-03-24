@@ -1,7 +1,7 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.component.CustomData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface EntityAccessor {
 
     @Accessor
-    NbtComponent getCustomData();
+    CustomData getCustomData();
 }

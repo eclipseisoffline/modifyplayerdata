@@ -1,0 +1,13 @@
+[versions]
+multimod = "0.2.7"
+
+minecraft = "26.1"
+minecraft-release = "26.1"
+
+neoforge = "26.1.0.1-beta"
+
+[libraries]
+minecraft = {group = "com.mojang", name = "minecraft", version.ref = "minecraft"}
+
+[plugins]
+multimod = {id = "xyz.eclipseisoffline.multimod", version.ref = "multimod"}
