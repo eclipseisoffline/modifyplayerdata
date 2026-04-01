@@ -1,4 +1,1 @@
-- Update to Minecraft 26.1.
-- Add support for the `active_effects` tag. This allows you to show an effect's icon without showing its particles, or vice versa, or to add a hidden effect to an effect instance.
-- Add support for the `recipeBook` tag. This also allows you to open and close the recipe book for a player using commands.
-- Port to NeoForge.
+- Mark 26.1.1 as supported.
