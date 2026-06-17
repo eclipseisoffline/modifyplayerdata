@@ -2,11 +2,18 @@ package xyz.eclipseisoffline.modifyplayerdata;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket;
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.stats.ServerRecipeBook;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.FoodDataAccessor;
@@ -14,6 +21,7 @@ import xyz.eclipseisoffline.modifyplayerdata.mixin.LivingEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.ServerPlayerAccessor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -100,6 +108,18 @@ public class PlayerData {
             player.hurtDuration = hurtTime;
         });
         getOptionalFloat(input, "AbsorptionAmount").ifPresent(player::setAbsorptionAmount);
+        input.read("attributes", AttributeInstance.Packed.LIST_CODEC).ifPresent(attributes -> {
+            ((LivingEntityAccessor) player).setAttributes(new AttributeMap(DefaultAttributes.getSupplier(EntityTypes.PLAYER)));
+            player.getAttributes().apply(attributes);
+            List<AttributeInstance> newAttributes = new ArrayList<>();
+            for (Holder<Attribute> attribute : BuiltInRegistries.ATTRIBUTE.asHolderIdMap()) {
+                AttributeInstance instance = player.getAttribute(attribute);
+                if (instance != null) {
+                    newAttributes.add(instance);
+                }
+            }
+            player.level().getChunkSource().sendToTrackingPlayersAndSelf(player, new ClientboundUpdateAttributesPacket(player.getId(), newAttributes));
+        });
         input.read("attributes", AttributeInstance.Packed.LIST_CODEC).ifPresent(player.getAttributes()::apply);
 
         input.read("active_effects", MobEffectInstance.CODEC.listOf()).ifPresent(effects -> {

@@ -3,8 +3,10 @@ package xyz.eclipseisoffline.modifyplayerdata.mixin;
 import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -28,4 +30,8 @@ public interface LivingEntityAccessor {
 
     @Accessor
     void setCurrentImpulseContextResetGraceTime(int currentImpulseContextResetGraceTime);
+
+    @Accessor
+    @Mutable
+    void setAttributes(AttributeMap attributes);
 }

@@ -1,5 +1,6 @@
 package xyz.eclipseisoffline.modifyplayerdata.mixin;
 
+import net.minecraft.advancements.predicates.NbtPredicate;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +12,6 @@ import xyz.eclipseisoffline.modifyplayerdata.PlayerData;
 
 import java.util.HashSet;
 import java.util.Set;
-import net.minecraft.advancements.criterion.NbtPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.commands.data.EntityDataAccessor;
 import net.minecraft.server.level.ServerPlayer;
