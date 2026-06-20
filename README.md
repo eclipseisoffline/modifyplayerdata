@@ -91,6 +91,7 @@ NBT tags currently supported:
 - `Inventory`
 - `SelectedItem`
 - `SelectedItemSlot`
+- `XpSeed`
 - `SleepTimer`
 - `Score`
 - `foodLevel`
@@ -121,7 +122,6 @@ NBT tags I won't add support for:
 - `XpP`[^4]
 - `XpLevel`[^4]
 - `XpTotal`[^4]
-- `XpSeed`[^5]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
 - `LastDeathLocation`[^6]
@@ -135,5 +135,4 @@ NBT tags I won't add support for:
 [^2]: Use the `/ride` command.
 [^3]: Use the `/waypoint` command.
 [^4]: Use the `/xp` command.
-[^5]: I can't think of any use cases for this tag, but will add support on request.
 [^6]: Unable to implement due to limitations within the vanilla client.

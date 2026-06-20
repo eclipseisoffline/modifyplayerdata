@@ -8,5 +8,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface PlayerAccessor {
 
     @Accessor
+    void setEnchantmentSeed(int enchantmentSeed);
+
+    @Accessor
     void setSleepCounter(int sleepCounter);
 }

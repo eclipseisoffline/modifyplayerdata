@@ -175,6 +175,13 @@ public class PlayerData {
             player.connection.send(new ClientboundSetHeldSlotPacket(slot));
         });
 
+        input.getInt("XpSeed").ifPresent(seed -> {
+            if (seed == 0) {
+                seed = player.getRandom().nextInt();
+            }
+            ((PlayerAccessor) player).setEnchantmentSeed(seed);
+        });
+
         getOptionalShort(input, "SleepTimer").ifPresent(timer -> ((PlayerAccessor) player).setSleepCounter(timer));
         input.getInt("Score").ifPresent(player::setScore);
 

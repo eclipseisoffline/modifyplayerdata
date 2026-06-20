@@ -1,2 +1,1 @@
-- Update to 26.2.
-- Fixed an issue that resulted in player attributes being applied incorrectly.
+- Added support for the `XpSeed` tag (#8).
