@@ -30,6 +30,7 @@ multimod {
             accessToken = providers.gradleProperty("MODRINTH_API_TOKEN")
             projectId = providers.gradleProperty("modrinth_project_id")
             minecraftVersions.addAll(libs.versions.minecraft.release.get().split(","))
+            environment = SERVER_ONLY
         }
 
         github {
