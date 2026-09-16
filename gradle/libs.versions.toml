@@ -1,10 +1,10 @@
 [versions]
-multimod = "0.2.12"
+multimod = "0.2.13"
 
-minecraft = "26.2"
-minecraft-release = "26.2"
+minecraft = "26.3"
+minecraft-release = "26.3"
 
-neoforge = "26.2.0.0-beta"
+neoforge = "26.3.0.1-beta"
 
 [libraries]
 minecraft = {group = "com.mojang", name = "minecraft", version.ref = "minecraft"}

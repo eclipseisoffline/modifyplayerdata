@@ -1,1 +1,5 @@
-- Added support for the `XpSeed` tag (#8).
+- Update to 26.3.
+- Add support for the following tags:
+  - `invulnerable_time`
+  - `locator_bar_icon`
+  - `post_effects`

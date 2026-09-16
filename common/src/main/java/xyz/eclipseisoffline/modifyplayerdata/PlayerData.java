@@ -4,9 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.common.ClientboundPostEffectsPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveMobEffectPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.stats.ServerRecipeBook;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.waypoints.Waypoint;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.FoodDataAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.LivingEntityAccessor;
 import xyz.eclipseisoffline.modifyplayerdata.mixin.PlayerAccessor;
@@ -77,8 +80,9 @@ public class PlayerData {
         getOptionalDouble(input, "fall_distance").ifPresent(fallDistance -> player.fallDistance = fallDistance);
         getOptionalShort(input, "Fire").ifPresent(player::setRemainingFireTicks);
         input.getInt("Air").ifPresent(player::setAirSupply);
-        getOptionalBoolean(input, "Invulnerable").ifPresent(player::setInvulnerable);
+        getOptionalBoolean(input, "Invulnerable").ifPresent(player::setPermanentlyInvulnerable  );
         input.getInt("PortalCooldown").ifPresent(player::setPortalCooldown);
+        input.getInt("invulnerable_time").ifPresent(player::setInvulnerableTime);
         getOptionalBoolean(input, "Silent").ifPresent(player::setSilent);
         getOptionalBoolean(input, "NoGravity").ifPresent(player::setNoGravity);
         getOptionalBoolean(input, "Glowing").ifPresent(player::setGlowingTag);
@@ -108,6 +112,8 @@ public class PlayerData {
             player.hurtDuration = hurtTime;
         });
         getOptionalFloat(input, "AbsorptionAmount").ifPresent(player::setAbsorptionAmount);
+        input.getInt("current_impulse_context_reset_grace_time").ifPresent(time -> ((LivingEntityAccessor) player).setCurrentImpulseContextResetGraceTime(time));
+        input.read("current_explosion_impact_pos", Vec3.CODEC).ifPresent(pos -> player.currentImpulseImpactPos = pos);
         input.read("attributes", AttributeInstance.Packed.LIST_CODEC).ifPresent(attributes -> {
             ((LivingEntityAccessor) player).setAttributes(new AttributeMap(DefaultAttributes.getSupplier(EntityTypes.PLAYER)));
             player.getAttributes().apply(attributes);
@@ -156,6 +162,7 @@ public class PlayerData {
         }
 
         input.read("equipment", EntityEquipment.CODEC).ifPresent(equipment -> ((LivingEntityAccessor) player).getEquipment().setAll(equipment));
+        input.read("locator_bar_icon", Waypoint.Icon.CODEC).ifPresent(icon -> player.waypointIcon().copyFrom(icon));
 
 
         // Technically a mob property, we include it anyway because it's fun
@@ -165,6 +172,8 @@ public class PlayerData {
         // Player data
         input.list("Inventory", ItemStackWithSlot.CODEC).ifPresent(player.getInventory()::load);
 
+        // Note that this is technically not a real tag and not saved/loaded in Player,
+        // instead it is added by the /data command. So we support it anyway
         input.read("SelectedItem", ItemStack.CODEC).ifPresent(stack -> {
             player.getInventory().setItem(player.getInventory().getSelectedSlot(), stack);
             player.connection.send(new ClientboundSetEquipmentPacket(player.getId(),
@@ -175,6 +184,7 @@ public class PlayerData {
             player.connection.send(new ClientboundSetHeldSlotPacket(slot));
         });
 
+        getOptionalShort(input, "SleepTimer").ifPresent(timer -> ((PlayerAccessor) player).setSleepCounter(timer));
         input.getInt("XpSeed").ifPresent(seed -> {
             if (seed == 0) {
                 seed = player.getRandom().nextInt();
@@ -182,7 +192,6 @@ public class PlayerData {
             ((PlayerAccessor) player).setEnchantmentSeed(seed);
         });
 
-        getOptionalShort(input, "SleepTimer").ifPresent(timer -> ((PlayerAccessor) player).setSleepCounter(timer));
         input.getInt("Score").ifPresent(player::setScore);
 
         input.getInt("foodLevel").ifPresent(player.getFoodData()::setFoodLevel);
@@ -197,14 +206,10 @@ public class PlayerData {
 
         input.list("EnderItems", ItemStackWithSlot.CODEC).ifPresent(player.getEnderChestInventory()::fromSlots);
 
-        input.read("current_explosion_impact_pos", Vec3.CODEC).ifPresent(pos -> player.currentImpulseImpactPos = pos);
-        input.getInt("current_impulse_context_reset_grace_time").ifPresent(time -> ((LivingEntityAccessor) player).setCurrentImpulseContextResetGraceTime(time));
-
-
         // Server player data
         input.read("warden_spawn_tracker", WardenSpawnTracker.CODEC).ifPresent(manager -> ((ServerPlayerAccessor) player).setWardenSpawnTracker(manager));
-        input.read("entered_nether_pos", Vec3.CODEC).ifPresent(pos -> ((ServerPlayerAccessor) player).setEnteredNetherPosition(pos));
         getOptionalBoolean(input, "seenCredits").ifPresent(seenCredits -> ((ServerPlayerAccessor) player).setSeenCredits(seenCredits));
+        input.read("entered_nether_pos", Vec3.CODEC).ifPresent(pos -> ((ServerPlayerAccessor) player).setEnteredNetherPosition(pos));
 
         input.read("recipeBook", ServerRecipeBook.Packed.CODEC).ifPresent(packed -> {
             Set<ResourceKey<Recipe<?>>> known = ((ServerRecipeBookAccessor) player.getRecipeBook()).getKnown();
@@ -219,6 +224,12 @@ public class PlayerData {
         input.read("respawn", ServerPlayer.RespawnConfig.CODEC).ifPresent(respawn -> player.setRespawnPosition(respawn, false));
         getOptionalBoolean(input, "spawn_extra_particles_on_fall").ifPresent(player::setSpawnExtraParticlesOnFall);
         input.read("raid_omen_position", BlockPos.CODEC).ifPresent(player::setRaidOmenPosition);
+        input.read("post_effects", Identifier.CODEC.listOf()).ifPresent(effects -> {
+            player.clearPostEffects();
+            effects.forEach(player::addPostEffect);
+
+            player.connection.send(new ClientboundPostEffectsPacket(effects));
+        });
     }
 
     public static void write(ServerPlayer player, ValueOutput output) {

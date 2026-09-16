@@ -29,7 +29,8 @@ For support and/or any questions you may have, feel free to join [my discord](ht
 
 | Minecraft Version | Status       |
 |-------------------|--------------|
-| 26.2.x            | ✅ Current    |
+| 26.3.x            | ✅ Current   |
+| 26.2.x            | ✅ Current   |
 | 26.1.x            | ✔️ Available |
 | 1.21.11           | ✔️ Available |
 | 1.21.9+10         | ✔️ Available |
@@ -67,6 +68,7 @@ NBT tags currently supported:
 - `Air`
 - `Invulnerable`
 - `PortalCooldown`
+- `invulnerable_time`
 - `Silent`[^1]
 - `NoGravity`
 - `Glowing`
@@ -78,15 +80,16 @@ NBT tags currently supported:
 - `HurtTime`[^1]
 - `AbsorptionAmount`
 - `active_effects`
-- `attributes`
 - `current_explosion_impact_pos`
 - `current_impulse_context_reset_grace_time`
+- `attributes`
 - `FallFlying`
 - `last_hurt_by_player`
 - `last_hurt_by_player_memory_time`
 - `last_hurt_by_mob`
 - `ticks_since_last_hurt_by_mob`
 - `equipment`
+- `locator_bar_icon`
 - `LeftHanded`
 - `Inventory`
 - `SelectedItem`
@@ -107,6 +110,7 @@ NBT tags currently supported:
 - `respawn`
 - `spawn_extra_particles_on_fall`
 - `raid_omen_position`
+- `post_effects`
 
 NBT tags I won't add support for:
 
@@ -118,21 +122,20 @@ NBT tags I won't add support for:
 - `DeathTime`
 - `sleeping_pos`
 - `Brain`
-- `locator_bar_icon`[^3]
-- `XpP`[^4]
-- `XpLevel`[^4]
-- `XpTotal`[^4]
+- `XpP`[^3]
+- `XpLevel`[^3]
+- `XpTotal`[^3]
 - `ShoulderEntityLeft`
 - `ShoulderEntityRight`
-- `LastDeathLocation`[^6]
-- `playerGameType`
-- `previousPlayerGameType`[^6]
+- `LastDeathLocation`[^4]
+- `playerGameType`[^5]
+- `previousPlayerGameType`[^4]
 - `RootVehicle`[^2]
 - `Dimension`
 - `ender_pearls`
 
 [^1]: Is implemented but does not do much due to limitations within the vanilla client
 [^2]: Use the `/ride` command.
-[^3]: Use the `/waypoint` command.
-[^4]: Use the `/xp` command.
-[^6]: Unable to implement due to limitations within the vanilla client.
+[^3]: Use the `/xp` command.
+[^4]: Unable to implement due to limitations within the vanilla client.
+[^5]: Use the `/gamemode` command.

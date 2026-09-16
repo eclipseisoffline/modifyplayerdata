@@ -8,11 +8,11 @@ group = properties["maven_group"] as String
 version = properties["version"] as String
 
 multimod {
-    id = properties["mod_id"] as String
-    name = properties["mod_name"] as String
-    description = properties["mod_description"] as String
+    id = providers.gradleProperty("mod_id")
+    name = providers.gradleProperty("mod_name")
+    description = providers.gradleProperty("mod_description")
 
-    archivesBaseName = properties["archives_base_name"] as String
+    archivesBaseName = providers.gradleProperty("archives_base_name")
 
     minecraft {
         minecraft = libs.minecraft
@@ -23,19 +23,19 @@ multimod {
     modPublishing {
         base {
             changelog = file("CHANGELOG.md").readText()
-            type = ReleaseType.of(properties["release_type"] as String)
+            type = providers.gradleProperty("release_type").map { ReleaseType.of(it) }
         }
 
         modrinth {
             accessToken = providers.gradleProperty("MODRINTH_API_TOKEN")
-            projectId = properties["modrinth_project_id"] as String
+            projectId = providers.gradleProperty("modrinth_project_id")
             minecraftVersions.addAll(libs.versions.minecraft.release.get().split(","))
         }
 
         github {
             accessToken = providers.gradleProperty("GITHUB_API_PUBLISH_TOKEN")
-            repository = properties["github_repository"] as String
-            commitish = properties["git_branch"] as String
+            repository = providers.gradleProperty("github_repository")
+            commitish = providers.gradleProperty("git_branch")
         }
     }
 
